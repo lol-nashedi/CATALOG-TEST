@@ -1,0 +1,3297 @@
+local HttpService = game:GetService("HttpService")
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Result = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or krnl and krnl.request or request
+local State = 0
+
+local Item = {
+Username = "N0T_Z0RO100",
+DisplayName = "一一仁了二二二フ",
+Role = "SCRIPT CREATOR",
+Title = "VÆLOR CATALOG",
+Version = "v1.0",
+}
+
+local Entry = true
+
+local function Callback(Value)
+    local Ref = {
+    a = "ᴀ",
+    b = "ʙ",
+    c = "ᴄ",
+    d = "ᴅ",
+    e = "ᴇ",
+    f = "ꜰ",
+    g = "ɢ",
+    h = "ʜ",
+    i = "ɪ",
+    j = "ᴊ",
+    k = "ᴋ",
+    l = "ʟ",
+    m = "ᴍ",
+    n = "ɴ",
+    o = "ᴏ",
+    p = "ᴘ",
+    q = "ǫ",
+    r = "ʀ",
+    s = "s",
+    t = "ᴛ",
+    u = "ᴜ",
+    v = "ᴠ",
+    w = "ᴡ",
+    x = "x",
+    y = "ʏ",
+    z = "ᴢ",
+    A = "ᴀ",
+    B = "ʙ",
+    C = "ᴄ",
+    D = "ᴅ",
+    E = "ᴇ",
+    F = "ꜰ",
+    G = "ɢ",
+    H = "ʜ",
+    I = "ɪ",
+    J = "ᴊ",
+    K = "ᴋ",
+    L = "ʟ",
+    M = "ᴍ",
+    N = "ɴ",
+    O = "ᴏ",
+    P = "ᴘ",
+    Q = "ǫ",
+    R = "ʀ",
+    S = "s",
+    T = "ᴛ",
+    U = "ᴜ",
+    V = "ᴠ",
+    W = "ᴡ",
+    X = "x",
+    Y = "ʏ",
+    Z = "ᴢ",
+    }
+
+    local Node = ""
+
+    for i = 1, #Value do
+        local Index = Value:sub(i, i)
+        Node = Node .. (Ref[Index] or Index)
+    end
+
+    return Node
+end
+
+task.spawn(function()
+    pcall(function()
+        local Player = Callback(LocalPlayer.DisplayName)
+        local RE = ReplicatedStorage:FindFirstChild("RE")
+        local 1RPNam1eTex1t = RE and RE:FindFirstChild("1RPNam1eTex1t")
+        local 1RPNam1eColo1r = RE and RE:FindFirstChild("1RPNam1eColo1r")
+
+        if 1RPNam1eTex1t then
+            1RPNam1eTex1t:FireServer("RolePlayName", "_ᴠÆʟᴏʀ ᴄᴀᴛᴀʟᴏɢ_")
+        end
+
+        if 1RPNam1eColo1r then
+            1RPNam1eColo1r:FireServer("PickingRPNameColor", Color3.fromRGB(0, 0, 139))
+        end
+
+        if 1RPNam1eTex1t then
+            1RPNam1eTex1t:FireServer("RolePlayBio", "  _" .. Player .. "_")
+        end
+
+        if 1RPNam1eColo1r then
+            1RPNam1eColo1r:FireServer("PickingRPBioColor", Color3.fromRGB(255, 0, 193))
+        end
+    end)
+end)
+
+local Chunk = {
+codes = {},
+codesLastFetch = 0,
+saved = {},
+savedLastFetch = 0,
+views = {},
+outfitViews = {},
+outfitViewsLastFetch = 0,
+scriptViews = 0,
+following = {},
+followers = {},
+}
+
+local function Handler()
+    return os.time() -Chunk.codesLastFetch >= 30
+end
+
+local function Action()
+    return os.time() -Chunk.savedLastFetch >= 30
+end
+
+local function Routine()
+    return os.time() -Chunk.outfitViewsLastFetch >= 30
+end
+
+local Remotes = ReplicatedStorage:FindFirstChild("Remotes")
+local AvatarEditorOutfitCodes = Remotes and Remotes:FindFirstChild("AvatarEditorOutfitCodes")
+
+local function Worker(Data)
+    if not AvatarEditorOutfitCodes then
+        return false, "remote missing"
+    end
+
+    local Ok, result = pcall(function()
+        AvatarEditorOutfitCodes:InvokeServer("Load", Data)
+    end)
+
+    return Ok, result
+end
+
+local function Runner()
+    if not AvatarEditorOutfitCodes then
+        return nil
+    end
+
+    local Ok2, result2 = pcall(function()
+        return AvatarEditorOutfitCodes:InvokeServer("Export")
+    end)
+
+    return Ok2 and result2 or nil
+end
+
+local function Executor(Input)
+    if not AvatarEditorOutfitCodes then
+        return false, "not in supported game"
+    end
+
+    local Record, Holder = Worker(Input)
+
+    if not Record then
+        return false, tostring(Holder)
+    end
+
+    task.wait(0.5)
+
+    if Runner() == Input then
+        return true
+    end
+
+    return false, "verify failed"
+end
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "VælorAvatarCodes"
+ScreenGui.Parent = PlayerGui
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.ResetOnSpawn = false
+ScreenGui.DisplayOrder = 100
+ScreenGui.IgnoreGuiInset = true
+local MickeyCodesBlur = Lighting:FindFirstChild("VælorCodesBlur") or Instance.new("BlurEffect")
+MickeyCodesBlur.Name = "VælorCodesBlur"
+MickeyCodesBlur.Size = 0
+MickeyCodesBlur.Parent = Lighting
+
+local function Processor(Param)
+    TweenService:Create(MickeyCodesBlur, TweenInfo.new(0.35), {Size = Param and 16 or 0}):Play()
+end
+
+local Container = {
+BaseBg = Color3.fromRGB(255, 255, 255),
+Panel = Color3.fromRGB(240, 248, 255),
+Card = Color3.fromRGB(200, 230, 250),
+CardHover = Color3.fromRGB(170, 215, 245),
+Neon = Color3.fromRGB(90, 175, 255),
+Neon2 = Color3.fromRGB(140, 200, 255),
+Neon3 = Color3.fromRGB(120, 200, 255),
+Border = Color3.fromRGB(90, 175, 255),
+Text = Color3.fromRGB(30, 60, 100),
+TextDim = Color3.fromRGB(120, 150, 190),
+Success = Color3.fromRGB(70, 200, 130),
+Danger = Color3.fromRGB(255, 90, 110),
+Warning = Color3.fromRGB(255, 180, 70),
+}
+
+local function Listener(Source, Target)
+    local Wrapper = Instance.new("UICorner", Source)
+    Wrapper.CornerRadius = UDim.new(0, Target or 10)
+    return Wrapper
+end
+
+local function Resolver(Info, Payload, Context, Sender)
+    local Buffer = Instance.new("UIStroke", Info)
+    Buffer.Color = Payload or Container.Border
+    Buffer.Thickness = Context or 1
+    Buffer.Transparency = Sender or 0.7
+    return Buffer
+end
+
+local function func10(Receiver, Content, Args, Request)
+    local Cache = Instance.new("UIGradient", Receiver)
+    Cache.Color = ColorSequence.new(Content, Args)
+    Cache.Rotation = Request or 90
+    return Cache
+end
+
+local function func11(Request2, Request3, Request4, Request5, Request6)
+    local Tween = TweenService:Create(
+    Request2,
+    TweenInfo.new(Request3 or 0.25, Request5 or Enum.EasingStyle.Quad, Request6 or Enum.EasingDirection.Out),
+    Request4
+    )
+
+    Tween:Play()
+    return Tween
+end
+
+local function func12(Request7, Request8)
+    local Element = Request8 or 1.03
+    local HoverScale = Request7:FindFirstChild("HoverScale")
+
+    if not HoverScale then
+        HoverScale = Instance.new("UIScale", Request7)
+        HoverScale.Name = "HoverScale"
+        HoverScale.Scale = 1
+    end
+
+    Request7.MouseEnter:Connect(function()
+        func11(HoverScale, 0.15, {Scale = Element}, Enum.EasingStyle.Back)
+    end)
+
+    Request7.MouseLeave:Connect(function()
+        func11(HoverScale, 0.15, {Scale = 1})
+    end)
+end
+
+local function func13(Request9)
+    local Element2 = tostring(math.floor(Request9 or 0))
+    local Element3 = ""
+    local Element4 = 0
+
+    for i = #Element2, 1,-1 do
+        Element4 = Element4 + 1
+        Element3 = Element2:sub(i, i) .. Element3
+
+        if Element4 % 3 == 0 and i > 1 then
+            Element3 = "," .. Element3
+        end
+    end
+
+    return Element3
+end
+
+local ImageButton = Instance.new("ImageButton")
+ImageButton.Name = "ToggleButton"
+ImageButton.Parent = ScreenGui
+ImageButton.BackgroundTransparency = 1
+ImageButton.BorderSizePixel = 0
+ImageButton.Position = UDim2.new(0, 20, 0.4, 0)
+ImageButton.Size = UDim2.new(0, 60, 0, 60)
+ImageButton.Image = "rbxassetid://122273844057731"
+ImageButton.ZIndex = 20
+local imageLabel = Instance.new("ImageLabel", ImageButton)
+imageLabel.Size = UDim2.new(1.6, 0, 1.6, 0)
+imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+imageLabel.BackgroundTransparency = 1
+imageLabel.Image = "rbxassetid://122273844057731"
+imageLabel.ImageColor3 = Container.Neon
+imageLabel.ImageTransparency = 0.7
+imageLabel.ZIndex = 19
+
+task.spawn(function()
+    while Entry and imageLabel.Parent do
+        TweenService:Create(imageLabel, TweenInfo.new(1.5, Enum.EasingStyle.Sine), {ImageTransparency = 0.9})
+            :Play()
+        task.wait(1.5)
+
+        if not imageLabel.Parent then
+            break
+        end
+
+        TweenService:Create(imageLabel, TweenInfo.new(1.5, Enum.EasingStyle.Sine), {ImageTransparency = 0.5})
+            :Play()
+        task.wait(1.5)
+    end
+end)
+
+local Frame = Instance.new("Frame")
+Frame.Name = "Window"
+Frame.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+Frame.Size = UDim2.new(0, 650, 0, 420)
+Frame.BackgroundColor3 = Container.BaseBg
+Frame.BackgroundTransparency = 0.6
+Frame.BorderSizePixel = 0
+Frame.Visible = false
+Frame.ClipsDescendants = true
+Frame.ZIndex = 5
+Frame.Parent = ScreenGui
+Listener(Frame, 22)
+Resolver(Frame, Container.Neon, 1.2, 0.5)
+func10(Frame, Color3.fromRGB(255, 255, 255), Color3.fromRGB(225, 240, 255), 45)
+local textButton = Instance.new("TextButton", Frame)
+textButton.Size = UDim2.new(0, 24, 0, 24)
+textButton.Position = UDim2.new(1,-64, 0.02, 0)
+textButton.BackgroundTransparency = 1
+textButton.Text = "—"
+textButton.TextColor3 = Container.Neon
+textButton.Font = Enum.Font.GothamBold
+textButton.TextSize = 18
+textButton.AutoButtonColor = false
+textButton.BorderSizePixel = 0
+textButton.ZIndex = 8
+Listener(textButton, 12)
+
+textButton.MouseEnter:Connect(function()
+    textButton.TextColor3 = Container.Neon2
+end)
+
+textButton.MouseLeave:Connect(function()
+    textButton.TextColor3 = Container.Neon
+end)
+
+local Element5 = Instance.new("TextButton", Frame)
+Element5.Size = UDim2.new(0, 24, 0, 24)
+Element5.Position = UDim2.new(1,-34, 0.02, 0)
+Element5.BackgroundTransparency = 1
+Element5.Text = "X"
+Element5.TextColor3 = Container.Danger
+Element5.Font = Enum.Font.LuckiestGuy
+Element5.TextSize = 25
+Element5.AutoButtonColor = false
+Element5.BorderSizePixel = 0
+Element5.ZIndex = 8
+Listener(Element5, 12)
+
+Element5.MouseEnter:Connect(function()
+    Element5.TextColor3 = Color3.fromRGB(255, 130, 145)
+end)
+
+Element5.MouseLeave:Connect(function()
+    Element5.TextColor3 = Container.Danger
+end)
+
+local function func14(Name, Request10, Request11, Request12)
+    local textButton2 = Instance.new("TextButton", Frame)
+    textButton2.Name = Name
+    textButton2.Size = UDim2.new(0, 140, 0, 38)
+    textButton2.Position = UDim2.new(0, 14, 0, 40 + (Request11 -1) * 44)
+    textButton2.BackgroundColor3 = Container.Card
+    textButton2.BackgroundTransparency = 0.35
+    textButton2.BorderSizePixel = 0
+    textButton2.Text = "   " .. Request10
+    textButton2.TextColor3 = Container.Text
+    textButton2.Font = Enum.Font.GothamBold
+    textButton2.TextSize = 13
+    textButton2.TextXAlignment = Enum.TextXAlignment.Left
+    textButton2.AutoButtonColor = false
+    textButton2.ZIndex = 7
+    Listener(textButton2, 11)
+    local frame1 = Instance.new("Frame", textButton2)
+    frame1.Name = "Accent"
+    frame1.Size = UDim2.new(0, 3, 0, 18)
+    frame1.Position = UDim2.new(0, 6, 0.5,-9)
+    frame1.BackgroundColor3 = Request12 or Container.Neon
+    frame1.BorderSizePixel = 0
+    frame1.ZIndex = 8
+    Listener(frame1, 2)
+
+    textButton2.MouseEnter:Connect(function()
+        func11(textButton2, 0.15, {BackgroundTransparency = 0.15, BackgroundColor3 = Container.CardHover})
+    end)
+
+    textButton2.MouseLeave:Connect(function()
+        local Instance2 = {
+        BackgroundTransparency = textButton2:GetAttribute("Active") and 0.05 or 0.35,
+        BackgroundColor3 = Container.Card,
+        }
+        func11(textButton2, 0.15, Instance2)
+    end)
+
+    return textButton2
+end
+
+local Element6 = func14("HomeButton", " HOME", 1, Container.Neon)
+local Element7 = func14("SavedCodesButton", " SAVED", 2, Container.Warning)
+local Element8 = func14("MyUploadedCodesButton", " MY CODES", 3, Container.Neon2)
+local Element9 = Instance.new("TextButton", Frame)
+Element9.Size = UDim2.new(0, 140, 0, 44)
+Element9.Position = UDim2.new(0, 14, 0, 186)
+Element9.BackgroundColor3 = Container.Neon3
+Element9.BackgroundTransparency = 0.15
+Element9.BorderSizePixel = 0
+Element9.Text = "+  UPLOAD"
+Element9.TextColor3 = Color3.fromRGB(255, 255, 255)
+Element9.Font = Enum.Font.GothamBlack
+Element9.TextSize = 15
+Element9.AutoButtonColor = false
+Element9.ZIndex = 7
+Listener(Element9, 12)
+func10(Element9, Container.Neon, Container.Neon2, 90)
+
+Element9.MouseEnter:Connect(function()
+    func11(Element9, 0.15, {BackgroundTransparency = 0})
+end)
+
+Element9.MouseLeave:Connect(function()
+    func11(Element9, 0.15, {BackgroundTransparency = 0.15})
+end)
+
+func12(Element9)
+local Element10 = Instance.new("TextButton", Frame)
+Element10.Size = UDim2.new(0, 140, 0, 30)
+Element10.Position = UDim2.new(0, 14, 0, 238)
+Element10.BackgroundColor3 = Container.Card
+Element10.BackgroundTransparency = 0.4
+Element10.BorderSizePixel = 0
+Element10.Text = "O  Refresh"
+Element10.TextColor3 = Color3.fromRGB(255, 255, 255)
+Element10.Font = Enum.Font.GothamBold
+Element10.TextSize = 11
+Element10.AutoButtonColor = false
+Element10.ZIndex = 7
+Listener(Element10, 10)
+local Element11 = Instance.new("TextButton", Frame)
+Element11.Size = UDim2.new(0, 140, 0, 44)
+Element11.Position = UDim2.new(0, 14, 0, 276)
+Element11.BackgroundColor3 = Container.Neon3
+Element11.BackgroundTransparency = 0.15
+Element11.BorderSizePixel = 0
+Element11.Text = "SHARE FIT"
+Element11.TextColor3 = Color3.fromRGB(255, 255, 255)
+Element11.Font = Enum.Font.GothamBlack
+Element11.TextSize = 14
+Element11.AutoButtonColor = false
+Element11.ZIndex = 7
+Listener(Element11, 12)
+func10(Element11, Container.Neon, Container.Neon2, 90)
+
+Element11.MouseEnter:Connect(function()
+    func11(Element11, 0.15, {BackgroundTransparency = 0})
+end)
+
+Element11.MouseLeave:Connect(function()
+    func11(Element11, 0.15, {BackgroundTransparency = 0.15})
+end)
+
+func12(Element11)
+local Element12 = Instance.new("TextButton", Frame)
+Element12.Name = "SideProfileBtn"
+Element12.Size = UDim2.new(0, 140, 0, 44)
+Element12.Position = UDim2.new(0, 14, 0, 324)
+Element12.BackgroundColor3 = Container.Neon3
+Element12.BackgroundTransparency = 0.15
+Element12.BorderSizePixel = 0
+Element12.Text = "PROFILE"
+Element12.TextColor3 = Color3.fromRGB(255, 255, 255)
+Element12.Font = Enum.Font.GothamBlack
+Element12.TextSize = 14
+Element12.AutoButtonColor = false
+Element12.ZIndex = 7
+Listener(Element12, 12)
+func10(Element12, Container.Neon, Container.Neon2, 90)
+
+Element12.MouseEnter:Connect(function()
+    func11(Element12, 0.15, {BackgroundTransparency = 0})
+end)
+
+Element12.MouseLeave:Connect(function()
+    func11(Element12, 0.15, {BackgroundTransparency = 0.15})
+end)
+
+func12(Element12)
+
+task.spawn(function()
+    while Entry and ScreenGui.Parent do
+        if Element4 > 0 then
+            local Step = 180 - (os.time() -Element4)
+            if Step > 0 then
+                Element11.Text = "SHARE (" .. Step .. "s)"
+            else
+                Element11.Text = "SHARE FIT"
+            end
+        end
+        task.wait(1)
+    end
+end)
+
+local textBox = Instance.new("TextBox", Frame)
+textBox.Size = UDim2.new(0, 200, 0, 34)
+textBox.Position = UDim2.new(0, 164, 0, 40)
+textBox.BackgroundColor3 = Container.Card
+textBox.BackgroundTransparency = 0.35
+textBox.BorderSizePixel = 0
+textBox.PlaceholderText = "SEARCH HERE"
+textBox.PlaceholderColor3 = Container.TextDim
+textBox.Text = ""
+textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+textBox.Font = Enum.Font.LuckiestGuy
+textBox.TextSize = 12
+textBox.TextXAlignment = Enum.TextXAlignment.Left
+textBox.ClearTextOnFocus = false
+textBox.ZIndex = 7
+Listener(textBox, 10)
+Instance.new("UIPadding", textBox).PaddingLeft = UDim.new(0, 12)
+local Element13 = Instance.new("TextButton", Frame)
+Element13.Size = UDim2.new(0, 34, 0, 34)
+Element13.Position = UDim2.new(0, 370, 0, 40)
+Element13.BackgroundColor3 = Container.Card
+Element13.BackgroundTransparency = 0.35
+Element13.BorderSizePixel = 0
+Element13.Text = "O"
+Element13.TextColor3 = Container.Neon
+Element13.Font = Enum.Font.GothamBold
+Element13.TextSize = 16
+Element13.AutoButtonColor = false
+Element13.ZIndex = 7
+Listener(Element13, 10)
+local Frame2 = Instance.new("Frame")
+Frame2.Name = "ListContainer"
+Frame2.Size = UDim2.new(0, 240, 1,-90)
+Frame2.Position = UDim2.new(0, 164, 0, 82)
+Frame2.BackgroundColor3 = Container.Panel
+Frame2.BackgroundTransparency = 0.4
+Frame2.BorderSizePixel = 0
+Frame2.ClipsDescendants = true
+Frame2.ZIndex = 7
+Listener(Frame2, 20)
+Resolver(Frame2, Container.Border, 1, 0.6)
+local scrollingFrame = Instance.new("ScrollingFrame", Frame2)
+scrollingFrame.Size = UDim2.new(1, 0, 1, 0)
+scrollingFrame.BackgroundTransparency = 1
+scrollingFrame.BorderSizePixel = 0
+scrollingFrame.ClipsDescendants = true
+scrollingFrame.ScrollBarThickness = 4
+scrollingFrame.ScrollBarImageColor3 = Container.Neon
+scrollingFrame.ScrollBarImageTransparency = 0.15
+scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+scrollingFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+scrollingFrame.ZIndex = 7
+local IListLayout = Instance.new("UIListLayout", scrollingFrame)
+IListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+IListLayout.Padding = UDim.new(0, 6)
+local Element14 = Instance.new("UIPadding", scrollingFrame)
+Element14.PaddingTop = UDim.new(0, 8)
+Element14.PaddingLeft = UDim.new(0, 6)
+Element14.PaddingRight = UDim.new(0, 14)
+Element14.PaddingBottom = UDim.new(0, 8)
+local Frame3 = Instance.new("Frame")
+Frame3.Size = UDim2.new(0, 250, 0, 260)
+Frame3.Position = UDim2.new(0, 416, 0, 40)
+Frame3.BackgroundColor3 = Container.Panel
+Frame3.BackgroundTransparency = 0.4
+Frame3.BorderSizePixel = 0
+Frame3.ClipsDescendants = true
+Frame3.ZIndex = 7
+Listener(Frame3, 16)
+Resolver(Frame3, Container.Neon, 1.2, 0.5)
+local Frame4 = Instance.new("Frame")
+Frame4.Size = UDim2.new(0, 100, 0, 100)
+Frame4.Position = UDim2.new(0.5,-50, 0, 12)
+Frame4.BackgroundColor3 = Container.Neon
+Frame4.BackgroundTransparency = 0.85
+Frame4.BorderSizePixel = 0
+Frame4.ZIndex = 8
+Listener(Frame4, 50)
+
+task.spawn(function()
+    while Entry and Frame4.Parent do
+        TweenService:Create(Frame4, TweenInfo.new(1.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+        BackgroundTransparency = 0.65,
+        Size = UDim2.new(0, 112, 0, 112),
+        Position = UDim2.new(0.5,-56, 0, 6),
+        }):Play()
+
+        task.wait(1.4)
+
+        if not Frame4.Parent then
+            break
+        end
+
+        TweenService:Create(Frame4, TweenInfo.new(1.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+        BackgroundTransparency = 0.85,
+        Size = UDim2.new(0, 100, 0, 100),
+        Position = UDim2.new(0.5,-50, 0, 12),
+        }):Play()
+
+        task.wait(1.4)
+    end
+end)
+
+local Element15 = Instance.new("ImageLabel", Frame3)
+Element15.Size = UDim2.new(0, 84, 0, 84)
+Element15.Position = UDim2.new(0.5,-42, 0, 20)
+Element15.BackgroundColor3 = Container.Card
+Element15.BorderSizePixel = 0
+Element15.Image = ""
+Element15.ZIndex = 9
+Listener(Element15, 42)
+Resolver(Element15, Container.Neon, 2, 0.2)
+local Element16 = Instance.new("ImageLabel", Frame3)
+Element16.Size = UDim2.new(0, 44, 0, 44)
+Element16.Position = UDim2.new(0.5, 20, 0, 62)
+Element16.BackgroundTransparency = 1
+Element16.Image = "rbxassetid://92116889798388"
+Element16.ZIndex = 12
+
+task.spawn(function()
+    while Entry and Element15.Parent do
+        TweenService:Create(
+        Element15,
+        TweenInfo.new(2.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
+        {Position = UDim2.new(0.5,-42, 0, 14)}
+        ):Play()
+
+        TweenService:Create(
+        Element16,
+        TweenInfo.new(2.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
+        {Position = UDim2.new(0.5, 20, 0, 56)}
+        ):Play()
+
+        task.wait(2.2)
+
+        if not Element15.Parent then
+            break
+        end
+
+        TweenService:Create(
+        Element15,
+        TweenInfo.new(2.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
+        {Position = UDim2.new(0.5,-42, 0, 24)}
+        ):Play()
+
+        TweenService:Create(
+        Element16,
+        TweenInfo.new(2.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
+        {Position = UDim2.new(0.5, 20, 0, 66)}
+        ):Play()
+
+        task.wait(2.2)
+    end
+end)
+
+local textLabel = Instance.new("TextLabel", Frame3)
+textLabel.Size = UDim2.new(1,-20, 0, 20)
+textLabel.Position = UDim2.new(0, 10, 0, 116)
+textLabel.BackgroundTransparency = 1
+textLabel.Text = Instance2.DisplayName
+textLabel.TextColor3 = Container.Text
+textLabel.Font = Enum.Font.GothamBlack
+textLabel.TextSize = 16
+textLabel.ZIndex = 9
+local Element17 = Instance.new("TextLabel", Frame3)
+Element17.Size = UDim2.new(1,-20, 0, 13)
+Element17.Position = UDim2.new(0, 10, 0, 136)
+Element17.BackgroundTransparency = 1
+Element17.Text = Instance2.Role
+Element17.TextColor3 = Container.Neon
+Element17.Font = Enum.Font.LuckiestGuy
+Element17.TextSize = 11
+Element17.ZIndex = 9
+local Frame5 = Instance.new("Frame")
+Frame5.Size = UDim2.new(1,-32, 0, 1)
+Frame5.Position = UDim2.new(0, 16, 0, 156)
+Frame5.BackgroundColor3 = Container.Border
+Frame5.BackgroundTransparency = 0.5
+Frame5.BorderSizePixel = 0
+Frame5.ZIndex = 9
+local Element18 = Instance.new("TextLabel", Frame3)
+Element18.Size = UDim2.new(1,-20, 0, 18)
+Element18.Position = UDim2.new(0, 10, 0, 164)
+Element18.BackgroundTransparency = 1
+Element18.Text = Instance2.Title
+Element18.TextColor3 = Container.Text
+Element18.Font = Enum.Font.LuckiestGuy
+Element18.TextSize = 13
+Element18.ZIndex = 9
+local Element19 = Instance.new("TextLabel", Frame3)
+Element19.Size = UDim2.new(1,-20, 0, 16)
+Element19.Position = UDim2.new(0, 10, 0, 192)
+Element19.BackgroundTransparency = 1
+Element19.Text = " 0 views"
+Element19.TextColor3 = Container.TextDim
+Element19.Font = Enum.Font.GothamBold
+Element19.TextSize = 12
+Element19.ZIndex = 9
+local Element20 = Instance.new("TextLabel", Frame3)
+Element20.Size = UDim2.new(1,-20, 0, 14)
+Element20.Position = UDim2.new(0, 10, 0, 214)
+Element20.BackgroundTransparency = 1
+Element20.Text = Instance2.Version .. "  •  Active"
+Element20.TextColor3 = Container.TextDim
+Element20.Font = Enum.Font.GothamMedium
+Element20.TextSize = 10
+Element20.ZIndex = 9
+
+local function Instance3()
+    if not Entry or not Frame3.Parent then
+        return
+    end
+
+    local Frame6 = Instance.new("Frame")
+    Frame6.BackgroundColor3 = Container.Neon
+    Frame6.BorderSizePixel = 0
+    Frame6.Size = UDim2.new(0, 0, 0, 0)
+    Frame6.Position = UDim2.new(math.random(15, 80) / 100, 0, math.random(15, 80) / 100, 0)
+    Frame6.BackgroundTransparency = 0.1
+    Frame6.ZIndex = 11
+    Listener(Frame6, 6)
+
+    TweenService:Create(
+    Frame6,
+    TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+    {Size = UDim2.new(0, 8, 0, 8)}
+    ):Play()
+
+    task.delay(1.2, function()
+        if not Frame6.Parent then
+            return
+        end
+
+        local Tween = TweenService:Create(
+        Frame6,
+        TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+        {BackgroundTransparency = 1, Size = UDim2.new(0, 0, 0, 0)}
+        )
+
+        Tween:Play()
+
+        Tween.Completed:Connect(function()
+            Frame6:Destroy()
+        end)
+    end)
+end
+
+task.spawn(function()
+    while Entry and Frame3.Parent do
+        task.wait(math.random(10, 20) / 10)
+        if Entry and Frame3.Parent then
+            Instance3()
+        end
+    end
+end)
+
+local Element21 = {}
+
+local function func16(Request13)
+    if Element21[Request13] then
+        return Element21[Request13]
+    end
+
+    local Ok3, result3 = pcall(function()
+        return Players:GetUserThumbnailAsync(Request13, Enum.ThumbnailType.AvatarBust, Enum.ThumbnailSize.Size420x420)
+    end)
+
+    if Ok3 and result3 then
+        Element21[Request13] = result3
+        return result3
+    end
+
+    return nil
+end
+
+local function func17()
+    local Ok4, result4 = pcall(function()
+        return Players:GetUserIdFromNameAsync(Instance2.Username)
+    end)
+    return Ok4 and result4 or nil
+end
+
+local function func18()
+    local Element22 = func17()
+
+    if Element22 then
+        task.spawn(function()
+            local Element23 = func16(Element22)
+            if Element23 and Element15.Parent then
+                Element15.Image = Element23
+            end
+        end)
+    end
+
+    textLabel.Text = Instance2.DisplayName
+    textLabel.TextColor3 = Container.Text
+    Element17.Text = Instance2.Role
+    Element17.TextColor3 = Container.Neon
+    Element18.Text = Instance2.Title
+    Element19.Text = " " .. func13(Chunk.scriptViews) .. " views"
+    Element20.Text = Instance2.Version .. "  •  Active"
+    Element16.Visible = true
+end
+
+local function func19(Request14)
+    local uploaderId = Request14.uploaderId
+
+    if uploaderId then
+        task.spawn(function()
+            local Element24 = func16(tonumber(uploaderId))
+            if Element24 and Element15.Parent then
+                Element15.Image = Element24
+            end
+        end)
+    end
+
+    textLabel.Text = Request14.uploaderDisplay or Request14.uploaderName or "Unknown"
+    textLabel.TextColor3 = Container.Text
+    Element17.Text = "OUTFIT CREATOR"
+    Element17.TextColor3 = Container.Success
+    Element18.Text = Request14.Name or "Untitled"
+    Element19.Text = " " .. func13(Chunk.views[Request14.id] or Chunk.outfitViews[Request14.id] or 0) .. " views"
+    Element20.Text = "Uploaded  •  " .. (Request14.timestamp and os.date("%b %d, %Y", Request14.timestamp) or "Unknown")
+    Element16.Visible = false
+end
+
+local Element25 = Instance.new("TextButton", Frame6)
+Element25.Size = UDim2.new(0, 250, 0, 40)
+Element25.Position = UDim2.new(0, 416, 0, 312)
+Element25.BackgroundColor3 = Container.Neon
+Element25.BackgroundTransparency = 0.1
+Element25.BorderSizePixel = 0
+Element25.Text = "APPLY  FIT"
+Element25.TextColor3 = Color3.fromRGB(255, 255, 255)
+Element25.Font = Enum.Font.LuckiestGuy
+Element25.TextSize = 16
+Element25.AutoButtonColor = false
+Element25.ZIndex = 7
+Listener(Element25, 12)
+func10(Element25, Container.Neon, Container.Neon2, 90)
+func12(Element25)
+local Element26 = Instance.new("TextButton", Frame6)
+Element26.Size = UDim2.new(0, 250, 0, 40)
+Element26.Position = UDim2.new(0, 416, 0, 360)
+Element26.BackgroundColor3 = Container.Card
+Element26.BackgroundTransparency = 0.2
+Element26.BorderSizePixel = 0
+Element26.Text = "VIEW  PROFILE"
+Element26.TextColor3 = Container.Text
+Element26.Font = Enum.Font.LuckiestGuy
+Element26.TextSize = 16
+Element26.AutoButtonColor = false
+Element26.ZIndex = 7
+Listener(Element26, 12)
+func12(Element26)
+
+Element25.MouseEnter:Connect(function()
+    func11(Element25, 0.15, {BackgroundTransparency = 0})
+end)
+
+Element25.MouseLeave:Connect(function()
+    func11(Element25, 0.15, {BackgroundTransparency = 0.1})
+end)
+
+Element26.MouseEnter:Connect(function()
+    func11(Element26, 0.15, {BackgroundTransparency = 0.05})
+end)
+
+Element26.MouseLeave:Connect(function()
+    func11(Element26, 0.15, {BackgroundTransparency = 0.2})
+end)
+
+local Element27 = false
+local Element28
+local Position
+local Position2
+local Element29
+local Element30
+local Element31
+local All = "All"
+local Element32 = {}
+local Element33 = {}
+local tweenInfo = TweenInfo.new(0.42, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+local Element34 = TweenInfo.new(0.28, Enum.EasingStyle.Back, Enum.EasingDirection.In)
+
+ImageButton.InputBegan:Connect(function(Input2)
+    if Input2.UserInputType == Enum.UserInputType.MouseButton1 or Input2.UserInputType == Enum.UserInputType.Touch then
+        Element28 = true
+        Position = Input2.Position
+        Position2 = ImageButton.Position
+
+        Input2.Changed:Connect(function()
+            if Input2.UserInputState == Enum.UserInputState.End then
+                Element28 = false
+            end
+        end)
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(Input3)
+    if Element28 and (Input3.UserInputType == Enum.UserInputType.MouseMovement or Input3.UserInputType == Enum.UserInputType.Touch) then
+        local Part = Input3.Position -Position
+        ImageButton.Position = UDim2.new(Position2.X.Scale, Position2.X.Offset + Part.X, Position2.Y.Scale, Position2.Y.Offset + Part.Y)
+    end
+end)
+
+local frame5 = Instance.new("Frame", ScreenGui)
+frame5.AnchorPoint = Vector2.new(1, 1)
+frame5.Position = UDim2.new(1,-20, 1,-20)
+frame5.Size = UDim2.new(0, 280, 0, 400)
+frame5.BackgroundTransparency = 1
+frame5.ZIndex = 100
+local Element35 = Instance.new("UIListLayout", frame5)
+Element35.SortOrder = Enum.SortOrder.LayoutOrder
+Element35.VerticalAlignment = Enum.VerticalAlignment.Bottom
+Element35.HorizontalAlignment = Enum.HorizontalAlignment.Right
+Element35.Padding = UDim.new(0, 6)
+
+function ShowNotification(Request15, Request16)
+    if not Entry then
+        return
+    end
+
+    local Neon = Request16 or Container.Neon
+    local Frame7 = Instance.new("Frame")
+    Frame7.Size = UDim2.new(1, 0, 0, 40)
+    Frame7.BackgroundTransparency = 1
+    Frame7.LayoutOrder = #frame5:GetChildren()
+    Frame7.ZIndex = 101
+    local Frame8 = Instance.new("Frame")
+    Frame8.Size = UDim2.new(1, 0, 1, 0)
+    Frame8.Position = UDim2.new(1.4, 0, 0, 0)
+    Frame8.BackgroundColor3 = Container.BaseBg
+    Frame8.BackgroundTransparency = 0.05
+    Frame8.BorderSizePixel = 0
+    Frame8.ZIndex = 102
+    Listener(Frame8, 10)
+    Resolver(Frame8, Neon, 1.2, 0.3)
+    local Frame9 = Instance.new("Frame")
+    Frame9.Size = UDim2.new(0, 3, 1,-14)
+    Frame9.Position = UDim2.new(0, 6, 0, 7)
+    Frame9.BackgroundColor3 = Neon
+    Frame9.BorderSizePixel = 0
+    Frame9.ZIndex = 103
+    Listener(Frame9, 2)
+    local textLabel2 = Instance.new("TextLabel", Frame8)
+    textLabel2.Size = UDim2.new(1,-20, 1, 0)
+    textLabel2.Position = UDim2.new(0, 16, 0, 0)
+    textLabel2.BackgroundTransparency = 1
+    textLabel2.Text = Request15
+    textLabel2.TextColor3 = Container.Text
+    textLabel2.Font = Enum.Font.GothamBold
+    textLabel2.TextSize = 12
+    textLabel2.TextXAlignment = Enum.TextXAlignment.Left
+    textLabel2.TextWrapped = true
+    textLabel2.ZIndex = 103
+    TweenService:Create(Frame8, tweenInfo, {Position = UDim2.new(0, 0, 0, 0)}):Play()
+
+    task.delay(3, function()
+        if Frame8.Parent then
+            local Tween2 = TweenService:Create(Frame8, Element34, {Position = UDim2.new(1.4, 0, 0, 0)})
+            Tween2:Play()
+            Tween2.Completed:Wait()
+            Frame7:Destroy()
+        end
+    end)
+end
+
+local function func20()
+    local AbsolutePosition = ImageButton.AbsolutePosition
+    local AbsoluteSize = ImageButton.AbsoluteSize
+    return AbsolutePosition.X + AbsoluteSize.X / 2, AbsolutePosition.Y + AbsoluteSize.Y / 2
+end
+
+local function func21()
+    if not Entry or Element27 then
+        return
+    end
+
+    Element27 = true
+
+    if ImageButton.AbsoluteSize.X == 0 then
+        task.wait()
+    end
+
+    local Element36, Element37 = func20()
+    local PulseScale = ImageButton:FindFirstChild("PulseScale") or Instance.new("UIScale", ImageButton)
+    PulseScale.Name = "PulseScale"
+    PulseScale.Scale = 1
+    TweenService:Create(PulseScale, TweenInfo.new(0.13, Enum.EasingStyle.Back), {Scale = 1.45})
+        :Play()
+    task.wait(0.13)
+
+    if not Entry then
+        return
+    end
+
+    TweenService:Create(PulseScale, TweenInfo.new(0.16, Enum.EasingStyle.Back), {Scale = 1}):Play()
+    task.wait(0.16)
+
+    if PulseScale.Parent then
+        PulseScale:Destroy()
+    end
+
+    if not Entry then
+        return
+    end
+
+    ImageButton.Visible = false
+    Frame7.AnchorPoint = Vector2.new(0.5, 0.5)
+    Frame7.Position = UDim2.new(0, Element36, 0, Element37)
+    Frame7.Size = UDim2.new(0, 60, 0, 60)
+    Frame7.BackgroundTransparency = 1
+    Frame7.Visible = true
+
+    TweenService:Create(Frame7, TweenInfo.new(0.5, Enum.EasingStyle.Back), {
+    Position = UDim2.new(0.5, 0, 0.5, 0),
+    Size = UDim2.new(0, 680, 0, 420),
+    BackgroundTransparency = 0.6,
+    }):Play()
+
+    Processor(true)
+end
+
+local function func22()
+    if not Entry or not Element27 then
+        return
+    end
+
+    Element27 = false
+    local Element38, Element39 = func20()
+
+    local Tween3 = TweenService:Create(
+    Frame7,
+    TweenInfo.new(0.42, Enum.EasingStyle.Back, Enum.EasingDirection.In),
+    {Position = UDim2.new(0,
+        Element38, 0,
+        Element39),
+        Size = UDim2.new(0, 60, 0, 60),
+        BackgroundTransparency = 1}
+    )
+
+    Tween3:Play()
+    Tween3.Completed:Wait()
+    Frame7.Visible = false
+    Frame7.Position = UDim2.new(0.5, 0, 0.5, 0)
+    Frame7.Size = UDim2.new(0, 650, 0, 420)
+    Frame7.BackgroundTransparency = 0.6
+    ImageButton.Visible = true
+    local Element40 = Instance.new("UIScale", ImageButton)
+    Element40.Name = "PulseScale"
+    Element40.Scale = 0.4
+    TweenService:Create(Element40, TweenInfo.new(0.3, Enum.EasingStyle.Back), {Scale = 1}):Play()
+
+    task.delay(0.35, function()
+        if Element40.Parent then
+            Element40:Destroy()
+        end
+    end)
+
+    Processor(false)
+end
+
+local frame6 = Instance.new("Frame", ScreenGui)
+frame6.Size = UDim2.new(1, 0, 1, 0)
+frame6.BackgroundColor3 = Color3.new(0, 0, 0)
+frame6.BackgroundTransparency = 0.6
+frame6.BorderSizePixel = 0
+frame6.Visible = false
+frame6.ZIndex = 500
+local Frame10 = Instance.new("Frame")
+Frame10.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame10.Position = UDim2.new(0.5, 0, 0.5, 0)
+Frame10.Size = UDim2.new(0, 0, 0, 0)
+Frame10.BackgroundColor3 = Container.BaseBg
+Frame10.BackgroundTransparency = 0.05
+Frame10.BorderSizePixel = 0
+Frame10.ZIndex = 501
+Listener(Frame10, 18)
+Resolver(Frame10, Container.Danger, 1.5, 0.3)
+func10(Frame10, Color3.fromRGB(255, 255, 255), Color3.fromRGB(255, 235, 240), 45)
+local Element41 = Instance.new("TextLabel", Frame10)
+Element41.Size = UDim2.new(1, 0, 0, 40)
+Element41.Position = UDim2.new(0, 0, 0, 20)
+Element41.BackgroundTransparency = 1
+Element41.Text = "⚠️"
+Element41.Font = Enum.Font.GothamBold
+Element41.TextSize = 34
+Element41.ZIndex = 502
+local Element42 = Instance.new("TextLabel", Frame10)
+Element42.Size = UDim2.new(1,-40, 0, 26)
+Element42.Position = UDim2.new(0, 20, 0, 70)
+Element42.BackgroundTransparency = 1
+Element42.Text = "Close the script?"
+Element42.TextColor3 = Container.Text
+Element42.Font = Enum.Font.GothamBlack
+Element42.TextSize = 18
+Element42.ZIndex = 502
+local Element43 = Instance.new("TextLabel", Frame10)
+Element43.Size = UDim2.new(1,-40, 0, 32)
+Element43.Position = UDim2.new(0, 20, 0, 100)
+Element43.BackgroundTransparency = 1
+Element43.Text = "This will completely remove the GUI\nand stop all running features."
+Element43.TextColor3 = Container.TextDim
+Element43.Font = Enum.Font.GothamMedium
+Element43.TextSize = 12
+Element43.TextWrapped = true
+Element43.ZIndex = 502
+local Element44 = Instance.new("TextButton", Frame10)
+Element44.Size = UDim2.new(0, 160, 0, 40)
+Element44.Position = UDim2.new(0, 20, 1,-58)
+Element44.BackgroundColor3 = Container.Danger
+Element44.BorderSizePixel = 0
+Element44.Text = "YES, CLOSE"
+Element44.TextColor3 = Color3.fromRGB(255, 255, 255)
+Element44.Font = Enum.Font.LuckiestGuy
+Element44.TextSize = 14
+Element44.AutoButtonColor = false
+Element44.ZIndex = 502
+Listener(Element44, 12)
+func12(Element44)
+local Element45 = Instance.new("TextButton", Frame10)
+Element45.Size = UDim2.new(0, 160, 0, 40)
+Element45.Position = UDim2.new(1,-180, 1,-58)
+Element45.BackgroundColor3 = Container.Neon
+Element45.BorderSizePixel = 0
+Element45.Text = "CANCEL"
+Element45.TextColor3 = Color3.fromRGB(255, 255, 255)
+Element45.Font = Enum.Font.LuckiestGuy
+Element45.TextSize = 14
+Element45.AutoButtonColor = false
+Element45.ZIndex = 502
+Listener(Element45, 12)
+func10(Element45, Container.Neon, Container.Neon2, 90)
+func12(Element45)
+
+local function func23()
+    if not Entry then
+        return
+    end
+
+    frame6.Visible = true
+    frame6.BackgroundTransparency = 1
+    Frame10.Size = UDim2.new(0, 0, 0, 0)
+    TweenService:Create(frame6, TweenInfo.new(0.2), {BackgroundTransparency = 0.6}):Play()
+    TweenService:Create(Frame10, TweenInfo.new(0.35, Enum.EasingStyle.Back), {Size = UDim2.new(0, 400, 0, 220)})
+        :Play()
+end
+
+local function func24()
+    local Tween4 = TweenService:Create(frame6, TweenInfo.new(0.2), {BackgroundTransparency = 1})
+    TweenService:Create(Frame10, TweenInfo.new(0.2), {Size = UDim2.new(0, 0, 0, 0)}):Play()
+    Tween4:Play()
+    Tween4.Completed:Wait()
+    frame6.Visible = false
+end
+
+local function func25()
+    Entry = false
+
+    if PulseScale and PulseScale.Parent then
+        TweenService:Create(PulseScale, TweenInfo.new(0.3), {Size = 0}):Play()
+        task.delay(0.35, function()
+            pcall(function()
+                PulseScale:Destroy()
+            end)
+        end)
+    end
+
+    if Frame7 and Frame7.Parent then
+        pcall(function()
+            TweenService:Create(Frame7, TweenInfo.new(0.25), {BackgroundTransparency = 1}):Play()
+        end)
+    end
+
+    task.delay(0.3, function()
+        pcall(function()
+            ScreenGui:Destroy()
+        end)
+    end)
+
+    print("✔ Vælor Avatar Codes — terminated by user")
+end
+
+ImageButton.MouseButton1Click:Connect(function()
+    if Element27 then
+        func22()
+    else
+        func21()
+    end
+end)
+
+textButton2.MouseButton1Click:Connect(func22)
+Element5.MouseButton1Click:Connect(func23)
+Element45.MouseButton1Click:Connect(func24)
+
+Element44.MouseButton1Click:Connect(function()
+    func24()
+    task.wait(0.15)
+    func25()
+end)
+
+frame6.InputBegan:Connect(function(Input4)
+    if Input4.UserInputType == Enum.UserInputType.MouseButton1 and Input4.Target == frame6 then
+        func24()
+    end
+end)
+
+local function func26(Request17)
+    if not Entry or not Element38 then
+        return nil
+    end
+
+    local Ok5, result5 = pcall(function()
+        return Element38({Url = Request17, Method = "GET"})
+    end)
+
+    if not Ok5 or not result5 or not result5.Body or result5.Body == "null"
+    return nil
+end
+
+local Ok6, result1 = pcall(function()
+    return HttpService:JSONDecode(result5.Body)
+end)
+
+return Ok6 and result1 or nil
+end
+
+local function func27(Request18, Request19)
+    if not Element38 then
+        return false
+    end
+    return pcall(function()
+        Element38({
+        Url = Request18,
+        Method = "POST",
+        Headers = {["Content-Type"] = "application/json"},
+        Body = HttpService:JSONEncode(Request19),
+        })
+    end)
+end
+
+local function func28(Request20, Request21)
+    if not Element38 then
+        return false
+    end
+    return pcall(function()
+        Element38({
+        Url = Request20,
+        Method = "PUT",
+        Headers = {["Content-Type"] = "application/json"},
+        Body = HttpService:JSONEncode(Request21),
+        })
+    end)
+end
+
+local function func29(Request22)
+    if not Element38 then
+        return false
+    end
+    return pcall(function()
+        Element38({Url = Request22, Method = "DELETE"})
+    end)
+end
+
+local function func30(Request23)
+    local Element46 = 0
+
+    if type(Request23) == "table"
+    for Count in pairs(Request23) do
+        Element46 = Element46 + 1
+    end
+end
+
+return Element46
+end
+
+local function func31(Request24)
+    local Element47 = func26(("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/social_followers.json")
+        :gsub("%.json", "/" .. tostring(Request24) .. ".json"))
+    return (func30(Element47))
+end
+
+local function func32(Request25)
+    local Element48 = func26(("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/social_follows.json")
+        :gsub("%.json", "/" .. tostring(Request25) .. ".json"))
+    return (func30(Element48))
+end
+
+local function func33(Request26)
+    local Element49 = ("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/social_follows.json")
+        :gsub("%.json", "/" .. tostring(LocalPlayer.UserId) .. "/" .. tostring(Request26) .. ".json")
+    return func26(Element49) == true
+end
+
+local function func34(Request27)
+    func28(
+    ("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/social_follows.json")
+        :gsub("%.json", "/" .. tostring(LocalPlayer.UserId) .. "/" .. tostring(Request27) .. ".json"),
+    true
+    )
+    func28(
+    ("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/social_followers.json")
+        :gsub("%.json", "/" .. tostring(Request27) .. "/" .. tostring(LocalPlayer.UserId) .. ".json"),
+    true
+    )
+end
+
+local function func35(Request28)
+    func29(("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/social_follows.json")
+        :gsub("%.json", "/" .. tostring(LocalPlayer.UserId) .. "/" .. tostring(Request28) .. ".json"))
+    func29(("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/social_followers.json")
+        :gsub("%.json", "/" .. tostring(Request28) .. "/" .. tostring(LocalPlayer.UserId) .. ".json"))
+end
+
+local function func36(Request29)
+    local Element50 = 0
+    local outfitViews = Chunk.outfitViews
+
+    for Iter, Pos in ipairs(Chunk.codes or {}) do
+        if tostring(Pos.uploaderId) == tostring(Request29) then
+            Element50 = Element50 + (outfitViews[Pos.Element30] or 0)
+        end
+    end
+
+    return Element50
+end
+
+local function func37(Request30)
+    if not Request30 then
+        return ""
+    end
+
+    local Element51 = func26(("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/social_bios.json")
+        :gsub("%.json", "/" .. tostring(Request30) .. ".json"))
+
+    if type(Element51) == "string"
+    return Element51
+end
+
+return ""
+end
+
+local function func38(Request31, Request32)
+    if not Request31 then
+        return
+    end
+    func28(
+    ("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/social_bios.json")
+        :gsub("%.json", "/" .. tostring(Request31) .. ".json"),
+    Request32
+    )
+end
+
+local frame8 = Instance.new("Frame", ScreenGui)
+frame8.Name = "ProfileModal"
+frame8.Size = UDim2.new(1, 0, 1, 0)
+frame8.BackgroundColor3 = Color3.new(0, 0, 0)
+frame8.BackgroundTransparency = 0.6
+frame8.BorderSizePixel = 0
+frame8.Visible = false
+frame8.ZIndex = 300
+local Frame11 = Instance.new("Frame")
+Frame11.Name = "PCard"
+Frame11.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame11.Position = UDim2.new(0.5, 0, 0.5, 0)
+Frame11.Size = UDim2.new(0, 0, 0, 0)
+Frame11.BackgroundColor3 = Container.BaseBg
+Frame11.BackgroundTransparency = 0.05
+Frame11.BorderSizePixel = 0
+Frame11.ClipsDescendants = true
+Frame11.ZIndex = 301
+Listener(Frame11, 20)
+Resolver(Frame11, Container.Neon, 1.4, 0.35)
+func10(Frame11, Color3.fromRGB(255, 255, 255), Color3.fromRGB(232, 245, 255), 45)
+local Frame12 = Instance.new("Frame")
+Frame12.Size = UDim2.new(1, 0, 0, 130)
+Frame12.BackgroundColor3 = Container.Neon
+Frame12.BorderSizePixel = 0
+Frame12.ZIndex = 302
+Listener(Frame12, 20)
+func10(Frame12, Container.Neon, Container.Neon2, 45)
+local Element52 = Instance.new("TextButton", Frame12)
+Element52.Size = UDim2.new(0, 26, 0, 26)
+Element52.Position = UDim2.new(1,-34, 0, 8)
+Element52.BackgroundTransparency = 1
+Element52.BorderSizePixel = 0
+Element52.Text = "X"
+Element52.TextColor3 = Color3.fromRGB(255, 255, 255)
+Element52.Font = Enum.Font.LuckiestGuy
+Element52.TextSize = 18
+Element52.AutoButtonColor = false
+Element52.ZIndex = 320
+local Element53 = Instance.new("ImageLabel", Frame11)
+Element53.Name = "PAvatar"
+Element53.Size = UDim2.new(0, 92, 0, 92)
+Element53.Position = UDim2.new(0.5,-46, 0, 84)
+Element53.BackgroundColor3 = Container.Card
+Element53.BorderSizePixel = 0
+Element53.Image = ""
+Element53.ZIndex = 305
+Listener(Element53, 46)
+Resolver(Element53, Color3.fromRGB(255, 255, 255), 3, 0.15)
+local Element54 = Instance.new("TextLabel", Frame11)
+Element54.Size = UDim2.new(1,-40, 0, 22)
+Element54.Position = UDim2.new(0, 20, 0, 186)
+Element54.BackgroundTransparency = 1
+Element54.Text = "Name"
+Element54.TextColor3 = Container.Text
+Element54.Font = Enum.Font.GothamBlack
+Element54.TextSize = 18
+Element54.ZIndex = 305
+local Element55 = Instance.new("TextLabel", Frame11)
+Element55.Size = UDim2.new(1,-40, 0, 16)
+Element55.Position = UDim2.new(0, 20, 0, 210)
+Element55.BackgroundTransparency = 1
+Element55.Text = "@username"
+Element55.TextColor3 = Container.TextDim
+Element55.Font = Enum.Font.GothamMedium
+Element55.TextSize = 12
+Element55.ZIndex = 305
+local Element56 = Instance.new("TextButton", Frame11)
+Element56.Name = "PBio"
+Element56.Size = UDim2.new(1,-40, 0, 34)
+Element56.Position = UDim2.new(0, 20, 0, 230)
+Element56.BackgroundColor3 = Container.Panel
+Element56.BackgroundTransparency = 0.5
+Element56.BorderSizePixel = 0
+Element56.Text = "No bio yet."
+Element56.TextColor3 = Container.TextDim
+Element56.Font = Enum.Font.GothamMedium
+Element56.TextSize = 11
+Element56.TextWrapped = true
+Element56.AutoButtonColor = false
+Element56.ZIndex = 305
+Listener(Element56, 8)
+Resolver(Element56, Container.Border, 1, 0.7)
+local Element57 = Instance.new("TextButton", Frame11)
+Element57.Size = UDim2.new(0, 180, 0, 36)
+Element57.Position = UDim2.new(0.5,-90, 0, 272)
+Element57.BackgroundColor3 = Container.Neon
+Element57.BorderSizePixel = 0
+Element57.Text = "FOLLOW"
+Element57.TextColor3 = Color3.fromRGB(255, 255, 255)
+Element57.Font = Enum.Font.LuckiestGuy
+Element57.TextSize = 15
+Element57.AutoButtonColor = false
+Element57.ZIndex = 305
+Listener(Element57, 12)
+func10(Element57, Container.Neon, Container.Neon2, 90)
+func12(Element57)
+local Frame13 = Instance.new("Frame")
+Frame13.Size = UDim2.new(1,-40, 0, 54)
+Frame13.Position = UDim2.new(0, 20, 0, 318)
+Frame13.BackgroundColor3 = Container.Panel
+Frame13.BackgroundTransparency = 0.35
+Frame13.BorderSizePixel = 0
+Frame13.ZIndex = 305
+Listener(Frame13, 12)
+Resolver(Frame13, Container.Border, 1, 0.6)
+
+local function func39(Request33, Request34, Request35)
+    local frame = Instance.new("Frame", Request33)
+    frame.Size = UDim2.new(0, 100, 1, 0)
+    frame.Position = UDim2.new(0, Request34, 0, 0)
+    frame.BackgroundTransparency = 1
+    local textLabel3 = Instance.new("TextLabel", frame)
+    textLabel3.Name = "Value"
+    textLabel3.Size = UDim2.new(1, 0, 0, 28)
+    textLabel3.Position = UDim2.new(0, 0, 0, 4)
+    textLabel3.BackgroundTransparency = 1
+    textLabel3.Text = "0"
+    textLabel3.TextColor3 = Container.Text
+    textLabel3.Font = Enum.Font.GothamBlack
+    textLabel3.TextSize = 16
+    textLabel3.ZIndex = 306
+    local Element58 = Instance.new("TextLabel", frame)
+    Element58.Size = UDim2.new(1, 0, 0, 14)
+    Element58.Position = UDim2.new(0, 0, 0, 32)
+    Element58.BackgroundTransparency = 1
+    Element58.Text = Request35
+    Element58.TextColor3 = Container.TextDim
+    Element58.Font = Enum.Font.GothamBold
+    Element58.TextSize = 10
+    Element58.ZIndex = 306
+    return textLabel3
+end
+
+local Element59 = func39(Frame13, 10, "POSTS")
+local Element60 = func39(Frame13, 115, "FOLLOWERS")
+local Element61 = func39(Frame13, 220, "FOLLOWING")
+local Element62 = func39(Frame13, 325, "REACH")
+local Frame14 = Instance.new("Frame")
+Frame14.Size = UDim2.new(1,-40, 0, 1)
+Frame14.Position = UDim2.new(0, 20, 0, 382)
+Frame14.BackgroundColor3 = Container.Border
+Frame14.BackgroundTransparency = 0.5
+Frame14.BorderSizePixel = 0
+Frame14.ZIndex = 305
+local Element63 = Instance.new("TextLabel", Frame11)
+Element63.Size = UDim2.new(1,-40, 0, 16)
+Element63.Position = UDim2.new(0, 20, 0, 392)
+Element63.BackgroundTransparency = 1
+Element63.Text = "OUTFIT POSTS"
+Element63.TextColor3 = Container.Neon
+Element63.Font = Enum.Font.LuckiestGuy
+Element63.TextSize = 12
+Element63.TextXAlignment = Enum.TextXAlignment.Left
+Element63.ZIndex = 305
+local Frame15 = Instance.new("Frame")
+Frame15.Size = UDim2.new(1,-40, 1,-420)
+Frame15.Position = UDim2.new(0, 20, 0, 412)
+Frame15.BackgroundColor3 = Container.Panel
+Frame15.BackgroundTransparency = 0.5
+Frame15.BorderSizePixel = 0
+Frame15.ClipsDescendants = true
+Frame15.ZIndex = 305
+Listener(Frame15, 12)
+local Element64 = Instance.new("ScrollingFrame", Frame15)
+Element64.Size = UDim2.new(1, 0, 1, 0)
+Element64.BackgroundTransparency = 1
+Element64.BorderSizePixel = 0
+Element64.ClipsDescendants = true
+Element64.ScrollBarThickness = 4
+Element64.ScrollBarImageColor3 = Container.Neon
+Element64.CanvasSize = UDim2.new(0, 0, 0, 0)
+Element64.AutomaticCanvasSize = Enum.AutomaticSize.Y
+Element64.ZIndex = 306
+local IGridLayout = Instance.new("UIGridLayout", Element64)
+IGridLayout.CellSize = UDim2.new(0, 130, 0, 90)
+IGridLayout.CellPadding = UDim2.new(0, 10, 0, 10)
+IGridLayout.SortOrder = Enum.SortOrder.LayoutOrder
+local Element65 = Instance.new("UIPadding", Element64)
+Element65.PaddingTop = UDim.new(0, 10)
+Element65.PaddingLeft = UDim.new(0, 10)
+Element65.PaddingRight = UDim.new(0, 10)
+Element65.PaddingBottom = UDim.new(0, 10)
+local Element66 = Instance.new("TextLabel", Element64)
+Element66.Size = UDim2.new(1,-20, 0, 60)
+Element66.Position = UDim2.new(0, 10, 0, 10)
+Element66.BackgroundTransparency = 1
+Element66.Text = "No outfit posts yet."
+Element66.TextColor3 = Container.TextDim
+Element66.Font = Enum.Font.GothamBold
+Element66.TextSize = 12
+Element66.Visible = false
+Element66.ZIndex = 307
+
+local function func40()
+    for Instance4, Instance5 in ipairs(Element64:GetChildren()) do
+        if Instance5:IsA("Frame") or Instance5:IsA("TextButton") then
+            if Instance5 ~= Element66 then
+                Instance5:Destroy()
+            end
+        end
+    end
+end
+
+local Element67
+local Element68
+local Element69 = false
+
+local function func41()
+    if not Element67 then
+        return
+    end
+    if tostring(Element67) == tostring(LocalPlayer.UserId) then
+        Element57.Text = "THIS IS YOU"
+        Element57.BackgroundColor3 = Container.Card
+        Element57.TextColor3 = Container.TextDim
+        Element57.AutoButtonColor = false
+        Element57.Active = false
+    else
+        Element57.AutoButtonColor = false
+        Element57.Active = true
+
+        if Element69 then
+            Element57.Text = "FOLLOWING"
+            Element57.BackgroundColor3 = Container.Card
+            Element57.TextColor3 = Container.Text
+        else
+            Element57.Text = "FOLLOW"
+            Element57.BackgroundColor3 = Container.Neon
+            Element57.TextColor3 = Color3.fromRGB(255, 255, 255)
+        end
+    end
+end
+
+local function func42(Request36)
+    func40()
+    local Element70 = fetchCodes()
+    local Element71 = fetchAllViews()
+    local Element72 = {}
+
+    for Num, Cursor in ipairs(Element70) do
+        if tostring(Cursor.uploaderId) == tostring(Request36) then
+            table.insert(Element72, Cursor)
+        end
+    end
+
+    table.sort(Element72, function(Request37, Request38)
+        return (Request37.timestamp or 0) > (Request38.timestamp or 0)
+    end)
+
+    Element59.Text = func13(#Element72)
+
+    if #Element72 == 0 then
+        Element66.Visible = true
+        return
+    end
+
+    Element66.Visible = false
+
+    for i, Offset in ipairs(Element72) do
+        local textButton3 = Instance.new("TextButton", Element64)
+        textButton3.Name = "Post_" .. tostring(Offset.Element30)
+        textButton3.BackgroundColor3 = Container.Card
+        textButton3.BackgroundTransparency = 0.25
+        textButton3.BorderSizePixel = 0
+        textButton3.Text = ""
+        textButton3.AutoButtonColor = false
+        textButton3.LayoutOrder = i
+        textButton3.ZIndex = 307
+        Listener(textButton3, 10)
+        Resolver(textButton3, Container.Border, 1, 0.7)
+        local frame2 = Instance.new("Frame", textButton3)
+        frame2.Size = UDim2.new(1, 0, 0, 40)
+        frame2.Position = UDim2.new(0, 0, 1,-40)
+        frame2.BackgroundColor3 = Container.Neon
+        frame2.BackgroundTransparency = 0.55
+        frame2.BorderSizePixel = 0
+        frame2.ZIndex = 308
+        Listener(frame2, 8)
+        local textLabel4 = Instance.new("TextLabel", textButton3)
+        textLabel4.Size = UDim2.new(1,-10, 0, 20)
+        textLabel4.Position = UDim2.new(0, 5, 0, 6)
+        textLabel4.BackgroundTransparency = 1
+        textLabel4.Text = Offset.Name or "Untitled"
+        textLabel4.TextColor3 = Container.Text
+        textLabel4.Font = Enum.Font.GothamBold
+        textLabel4.TextSize = 12
+        textLabel4.TextXAlignment = Enum.TextXAlignment.Center
+        textLabel4.TextTruncate = Enum.TextTruncate.AtEnd
+        textLabel4.ZIndex = 309
+        local Offset2 = Instance.new("TextLabel", textButton3)
+        Offset2.Size = UDim2.new(1,-10, 0, 14)
+        Offset2.Position = UDim2.new(0, 5, 0, 26)
+        Offset2.BackgroundTransparency = 1
+        Offset2.Text = "👁 " .. func13(Element71[Offset.Element30] or 0)
+        Offset2.TextColor3 = Container.TextDim
+        Offset2.Font = Enum.Font.GothamMedium
+        Offset2.TextSize = 10
+        Offset2.TextXAlignment = Enum.TextXAlignment.Center
+        Offset2.ZIndex = 309
+        local Offset3 = Instance.new("TextLabel", textButton3)
+        Offset3.Size = UDim2.new(1,-10, 0, 14)
+        Offset3.Position = UDim2.new(0, 5, 1,-18)
+        Offset3.BackgroundTransparency = 1
+        Offset3.Text = Offset.timestamp and os.date("%b %d, %Y", Offset.timestamp) or ""
+        Offset3.TextColor3 = Container.TextDim
+        Offset3.Font = Enum.Font.GothamMedium
+        Offset3.TextSize = 9
+        Offset3.ZIndex = 309
+
+        textButton3.MouseEnter:Connect(function()
+            func11(textButton3, 0.15, {BackgroundTransparency = 0.05})
+        end)
+
+        textButton3.MouseLeave:Connect(function()
+            func11(textButton3, 0.15, {BackgroundTransparency = 0.25})
+        end)
+
+        textButton3.MouseButton1Click:Connect(function()
+            closeProfileModal()
+            Element29 = Offset.Element29
+            Element30 = Offset.Element30
+            Element31 = Offset
+
+            for Instance6, Instance7 in ipairs(scrollingFrame:GetChildren()) do
+                if Instance7:IsA("Frame") then
+                    TweenService:Create(Instance7, TweenInfo.new(0.15), {BackgroundColor3 = Container.Card})
+                        :Play()
+                end
+            end
+
+            recordOutfitView(Offset.Element30)
+            func19(Offset)
+            ShowNotification("SELECTED: " .. (Offset.Name or "Untitled"), Container.Neon)
+        end)
+    end
+end
+
+local function func43(Request39, Request40, Request41)
+    if not Entry or not Request39 then
+        return
+    end
+
+    Element67 = Request39
+    Element68 = Request41 or Request40 or "Unknown"
+
+    task.spawn(function()
+        local Element73 = func16(tonumber(Request39))
+        if Element73 and Element53.Parent then
+            Element53.Image = Element73
+        end
+    end)
+
+    Element54.Text = Request41 or Request40 or "Unknown"
+    Element55.Text = "@" .. (Request40 or "unknown")
+    Element56.Text = "Loading bio…"
+    Element56.TextColor3 = Container.TextDim
+
+    task.spawn(function()
+        local Element74 = func37(Request39)
+
+        if Element74 == ""
+        Element74 = tostring(Request39) == tostring(LocalPlayer.UserId) and "No bio yet. Click to add one!" "No bio yet."
+    end
+
+    if Element56.Parent then
+        Element56.Text = Element74
+        if Element74 ~= "No bio yet." and Element74 ~= "No bio yet. Click to add one!"
+        Element56.TextColor3 = Container.Text
+    else
+        Element56.TextColor3 = Container.TextDim
+    end
+end
+
+end)
+
+frame8.Visible = true
+frame8.BackgroundTransparency = 1
+Frame11.Size = UDim2.new(0, 460, 0, 560)
+TweenService:Create(frame8, TweenInfo.new(0.22), {BackgroundTransparency = 0.6}):Play()
+TweenService:Create(Frame11, TweenInfo.new(0.35, Enum.EasingStyle.Back), {Size = UDim2.new(0, 500, 0, 620)})
+    :Play()
+Element59.Text = "..."
+Element60.Text = "..."
+Element61.Text = "..."
+Element62.Text = "..."
+
+task.spawn(function()
+    local Label = func31(Request39)
+    Element60.Text = func13(Label)
+end)
+
+task.spawn(function()
+    local Label2 = func32(Request39)
+    Element61.Text = func13(Label2)
+end)
+
+task.spawn(function()
+    fetchCodes()
+    fetchAllViews()
+    local Label3 = func36(Request39)
+    Element62.Text = func13(Label3)
+    func42(Request39)
+end)
+
+task.spawn(function()
+    Element69 = func33(Request39)
+    func41()
+end)
+
+func41()
+end
+
+function closeProfileModal()
+    if not frame8.Visible then
+        return
+    end
+
+    Element67 = nil
+    local Tween5 = TweenService:Create(frame8, TweenInfo.new(0.2), {BackgroundTransparency = 1})
+    TweenService:Create(Frame11, TweenInfo.new(0.2), {Size = UDim2.new(0, 460, 0, 560)}):Play()
+    Tween5:Play()
+    Tween5.Completed:Wait()
+    frame8.Visible = false
+end
+
+Element52.MouseButton1Click:Connect(closeProfileModal)
+
+frame8.InputBegan:Connect(function(Input5)
+    if Input5.UserInputType == Enum.UserInputType.MouseButton1 and Input5.Target == frame8 then
+        closeProfileModal()
+    end
+end)
+
+local frame14 = Instance.new("Frame", ScreenGui)
+frame14.Name = "BioModal"
+frame14.Size = UDim2.new(1, 0, 1, 0)
+frame14.BackgroundColor3 = Color3.new(0, 0, 0)
+frame14.BackgroundTransparency = 0.6
+frame14.BorderSizePixel = 0
+frame14.Visible = false
+frame14.ZIndex = 400
+local Frame16 = Instance.new("Frame")
+Frame16.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame16.Position = UDim2.new(0.5, 0, 0.5, 0)
+Frame16.Size = UDim2.new(0, 420, 0, 220)
+Frame16.BackgroundColor3 = Container.BaseBg
+Frame16.BackgroundTransparency = 0.05
+Frame16.BorderSizePixel = 0
+Frame16.ZIndex = 401
+Listener(Frame16, 16)
+Resolver(Frame16, Container.Neon, 1.4, 0.3)
+func10(Frame16, Color3.fromRGB(255, 255, 255), Color3.fromRGB(235, 248, 255), 45)
+local Element75 = Instance.new("TextLabel", Frame16)
+Element75.Size = UDim2.new(1,-40, 0, 22)
+Element75.Position = UDim2.new(0, 20, 0, 14)
+Element75.BackgroundTransparency = 1
+Element75.Text = "EDIT YOUR BIO"
+Element75.TextColor3 = Container.Text
+Element75.Font = Enum.Font.GothamBlack
+Element75.TextSize = 16
+Element75.TextXAlignment = Enum.TextXAlignment.Left
+Element75.ZIndex = 402
+local Element76 = Instance.new("TextLabel", Frame16)
+Element76.Size = UDim2.new(0, 80, 0, 22)
+Element76.Position = UDim2.new(1,-100, 0, 14)
+Element76.BackgroundTransparency = 1
+Element76.Text = "0/150"
+Element76.TextColor3 = Container.TextDim
+Element76.Font = Enum.Font.GothamBold
+Element76.TextSize = 11
+Element76.TextXAlignment = Enum.TextXAlignment.Right
+Element76.ZIndex = 402
+local Element77 = Instance.new("TextBox", Frame16)
+Element77.Size = UDim2.new(1,-40, 0, 90)
+Element77.Position = UDim2.new(0, 20, 0, 44)
+Element77.BackgroundColor3 = Container.Card
+Element77.BackgroundTransparency = 0.3
+Element77.BorderSizePixel = 0
+Element77.PlaceholderText = "Write something about yourself"
+Element77.PlaceholderColor3 = Container.TextDim
+Element77.Text = ""
+Element77.TextColor3 = Container.Text
+Element77.Font = Enum.Font.GothamMedium
+Element77.TextSize = 12
+Element77.TextWrapped = true
+Element77.TextXAlignment = Enum.TextXAlignment.Left
+Element77.TextYAlignment = Enum.TextYAlignment.Top
+Element77.ClearTextOnFocus = false
+Element77.ZIndex = 402
+Listener(Element77, 10)
+local Element78 = Instance.new("UIPadding", Element77)
+Element78.PaddingLeft = UDim.new(0, 10)
+Element78.PaddingRight = UDim.new(0, 10)
+Element78.PaddingTop = UDim.new(0, 8)
+Element78.PaddingBottom = UDim.new(0, 8)
+
+Element77:GetPropertyChangedSignal("Text"):Connect(function()
+    if #Element77.Text > 150 then
+        Element77.Text = string.sub(Element77.Text, 1, 150)
+    end
+    Element76.Text = #Element77.Text .. "/150"
+end)
+
+local Element79 = Instance.new("TextButton", Frame16)
+Element79.Size = UDim2.new(0, 180, 0, 38)
+Element79.Position = UDim2.new(0, 20, 1,-52)
+Element79.BackgroundColor3 = Container.Neon
+Element79.BorderSizePixel = 0
+Element79.Text = "SAVE BIO"
+Element79.TextColor3 = Color3.fromRGB(255, 255, 255)
+Element79.Font = Enum.Font.LuckiestGuy
+Element79.TextSize = 14
+Element79.AutoButtonColor = false
+Element79.ZIndex = 402
+Listener(Element79, 12)
+func10(Element79, Container.Neon, Container.Neon2, 90)
+func12(Element79)
+local Element80 = Instance.new("TextButton", Frame16)
+Element80.Size = UDim2.new(0, 180, 0, 38)
+Element80.Position = UDim2.new(1,-200, 1,-52)
+Element80.BackgroundColor3 = Container.Card
+Element80.BackgroundTransparency = 0.2
+Element80.BorderSizePixel = 0
+Element80.Text = "CANCEL"
+Element80.TextColor3 = Container.Text
+Element80.Font = Enum.Font.LuckiestGuy
+Element80.TextSize = 14
+Element80.AutoButtonColor = false
+Element80.ZIndex = 402
+Listener(Element80, 12)
+func12(Element80)
+
+local function func44()
+    if not Element67 then
+        return
+    end
+
+    if tostring(Element67) ~= tostring(LocalPlayer.UserId) then
+        ShowNotification("YOU CAN ONLY EDIT YOUR OWN BIO", Container.Warning)
+        return
+    end
+
+    Element77.Text = func37(LocalPlayer.UserId)
+    Element76.Text = #Element77.Text .. "/150"
+    frame14.Visible = true
+end
+
+local function GuiObject()
+    frame14.Visible = false
+end
+
+Element80.MouseButton1Click:Connect(GuiObject)
+
+frame14.InputBegan:Connect(function(Input6)
+    if Input6.UserInputType == Enum.UserInputType.MouseButton1 and Input6.Target == frame14 then
+        GuiObject()
+    end
+end)
+
+Element79.MouseButton1Click:Connect(function()
+    local Label4 = Element77.Text:gsub("^%s+", ""):gsub("%s+$", "")
+    func38(LocalPlayer.UserId, Label4)
+    Element56.Text = #Label4 > 0 and Label4 or "No bio yet. Click to add one!"
+    Element56.TextColor3 = Container.Text
+    ShowNotification("BIO SAVED!", Container.Success)
+    GuiObject()
+end)
+
+Element56.MouseButton1Click:Connect(function()
+    if not Element67 then
+        return
+    end
+    if tostring(Element67) == tostring(LocalPlayer.UserId) then
+        func44()
+    end
+end)
+
+Element56.MouseEnter:Connect(function()
+    if Element67 and tostring(Element67) == tostring(LocalPlayer.UserId) then
+        func11(Element56, 0.15, {BackgroundTransparency = 0.25})
+    end
+end)
+
+Element56.MouseLeave:Connect(function()
+    func11(Element56, 0.15, {BackgroundTransparency = 0.5})
+end)
+
+Element57.MouseButton1Click:Connect(function()
+    if not Element67 then
+        return
+    end
+
+    if tostring(Element67) == tostring(LocalPlayer.UserId) then
+        return
+    end
+
+    if Element69 then
+        func35(Element67)
+        Element69 = false
+        ShowNotification("UNFOLLOWED", Container.Warning)
+    else
+        func34(Element67)
+        Element69 = true
+        ShowNotification("FOLLOWING " .. Element68, Container.Success)
+    end
+
+    func41()
+
+    task.spawn(function()
+        local Label5 = func31(Element67)
+        Element60.Text = func13(Label5)
+    end)
+end)
+
+Element12.MouseButton1Click:Connect(function()
+    func43(LocalPlayer.UserId, LocalPlayer.Name, LocalPlayer.DisplayName)
+end)
+
+Element26.MouseButton1Click:Connect(function()
+    if not Element31 then
+        ShowNotification("SELECT A CODE FIRST", Container.Warning)
+        return
+    end
+
+    local uploaderId = Element31.uploaderId
+
+    if not uploaderId then
+        ShowNotification("UPLOADER UNKNOWN", Container.Danger)
+        return
+    end
+
+    func43(
+    tonumber(uploaderId),
+    Element31.uploaderName or "unknown",
+    Element31.uploaderDisplay or Element31.uploaderName or "Unknown"
+    )
+end)
+
+local function func46()
+    local Element81 = os.date("%Y-%m-%d")
+    local Element82 = ("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/upload_limits.json")
+        :gsub("%.json", "/" .. LocalPlayer.UserId .. ".json")
+    local Element83 = func26(Element82)
+
+    if type(Element83) == "table" and Element83.date == Element81 then
+        return tonumber(Element83.count) or 0
+    end
+
+    return 0
+end
+
+local function func47()
+    local Element84 = os.date("%Y-%m-%d")
+    local Element85 = func46()
+    local Element86 = ("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/upload_limits.json")
+        :gsub("%.json", "/" .. LocalPlayer.UserId .. ".json")
+    func28(Element86, {date = Element84, count = Element85 + 1})
+end
+
+task.spawn(function()
+    pcall(function()
+        local Element87 = func26("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/script_stats.json/views.json")
+
+        if type(Element87) ~= "number"
+        Element87 = 0
+    end
+
+    local Element85 = Element87 + 1
+
+    func28(
+    "https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/script_stats.json/views.json",
+    Element85
+    )
+
+    Chunk.scriptViews = Element85
+
+    if not Element30 then
+        Element19.Text = " " .. func13(Element85) .. " views"
+    end
+end)
+
+end)
+
+local function func48(Request42)
+    if not Request42 then
+        return 0
+    end
+
+    if Element33[Request42] then
+        return Chunk.views[Request42] or Chunk.outfitViews[Request42] or 0
+    end
+
+    Element33[Request42] = true
+    local Element88 = 0
+
+    pcall(function()
+        local Element89 = func26(("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/outfit_views.json")
+            :gsub("%.json", "/" .. Request42 .. ".json"))
+
+        if type(Element89) ~= "number"
+        Element89 = 0
+    end
+
+    Element88 = Element89 + 1
+
+    func28(
+    ("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/outfit_views.json")
+        :gsub("%.json", "/" .. Request42 .. ".json"),
+    Element88
+    )
+end)
+
+Chunk.views[Request42] = Element88
+Chunk.outfitViews[Request42] = Element88
+return Element88
+end
+
+function fetchCodes(Player2)
+    if not Player2 and not Handler() and #Chunk.codes > 0 then
+        return Chunk.codes
+    end
+
+    local Element90 = func26("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/avatarcodes.json") or {}
+    local Element91 = {}
+    local Element92 = os.time()
+
+    for k, Offset4 in pairs(Element90) do
+        if type(Offset4) == "table" and Offset4.timestamp and Element92 -Offset4.timestamp <= 2592000 then
+            Offset4.Element30 = k
+            table.insert(Element91, Offset4)
+        end
+    end
+
+    Chunk.codes = Element91
+    Chunk.codesLastFetch = Element92
+    return Element91
+end
+
+function fetchSaved(Player3)
+    if not Player3 and not Action() and next(Chunk.saved) ~= nil then
+        return Chunk.saved
+    end
+
+    local Player4 = func26("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/savedcodes.json" .. "/" .. LocalPlayer.UserId .. ".json")
+    local Element93 = {}
+
+    for k in pairs(Player4 or {}) do
+        Element93[k] = true
+    end
+
+    Chunk.saved = Element93
+    Chunk.savedLastFetch = os.time()
+    return Element93
+end
+
+function fetchAllViews(Player5)
+    if not Player5 and not Routine() and next(Chunk.outfitViews) ~= nil then
+        return Chunk.outfitViews
+    end
+
+    local Element94 = func26("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/outfit_views.json")
+    local Element95 = {}
+
+    for k, Offset5 in pairs(Element94 or {}) do
+        if type(Offset5) == "number"
+        Element95[k] = Offset5
+    end
+end
+
+Chunk.outfitViews = Element95
+Chunk.outfitViewsLastFetch = os.time()
+return Element95
+end
+
+local frame16 = Instance.new("Frame", ScreenGui)
+frame16.Size = UDim2.new(0, 380, 0, 200)
+frame16.AnchorPoint = Vector2.new(0.5, 0.5)
+frame16.Position = UDim2.new(0.5, 0, 0.5, 0)
+frame16.BackgroundColor3 = Container.BaseBg
+frame16.BackgroundTransparency = 0.5
+frame16.BorderSizePixel = 0
+frame16.Visible = false
+frame16.ZIndex = 50
+Listener(frame16, 18)
+Resolver(frame16, Container.Neon, 1.3, 0.3)
+local Element96 = Instance.new("TextLabel", frame16)
+Element96.Size = UDim2.new(1,-140, 0, 22)
+Element96.Position = UDim2.new(0, 20, 0, 12)
+Element96.BackgroundTransparency = 1
+Element96.Text = "UPLOAD OUTFIT CODE"
+Element96.TextColor3 = Container.Text
+Element96.Font = Enum.Font.GothamBlack
+Element96.TextSize = 16
+Element96.TextXAlignment = Enum.TextXAlignment.Left
+Element96.ZIndex = 51
+local Element97 = Instance.new("TextLabel", frame16)
+Element97.Size = UDim2.new(0, 120, 0, 22)
+Element97.Position = UDim2.new(1,-140, 0, 12)
+Element97.BackgroundTransparency = 1
+Element97.Text = "0/10 today"
+Element97.TextColor3 = Container.Success
+Element97.Font = Enum.Font.GothamBold
+Element97.TextSize = 12
+Element97.TextXAlignment = Enum.TextXAlignment.Right
+Element97.ZIndex = 51
+local Element98 = Instance.new("TextLabel", frame16)
+Element98.Size = UDim2.new(1,-40, 0, 14)
+Element98.Position = UDim2.new(0, 20, 0, 34)
+Element98.BackgroundTransparency = 1
+Element98.Text = "Codes must start with BH-AE-"
+Element98.TextColor3 = Container.TextDim
+Element98.Font = Enum.Font.GothamMedium
+Element98.TextSize = 11
+Element98.TextXAlignment = Enum.TextXAlignment.Left
+Element98.ZIndex = 51
+
+local function func49(placeholderText, Request43)
+    local textBox2 = Instance.new("TextBox", frame16)
+    textBox2.Size = UDim2.new(1,-40, 0, 34)
+    textBox2.Position = UDim2.new(0, 20, 0, Request43)
+    textBox2.BackgroundColor3 = Container.Card
+    textBox2.BackgroundTransparency = 0.35
+    textBox2.BorderSizePixel = 0
+    textBox2.PlaceholderText = placeholderText
+    textBox2.PlaceholderColor3 = Container.TextDim
+    textBox2.TextColor3 = Container.Text
+    textBox2.Font = Enum.Font.GothamMedium
+    textBox2.TextSize = 13
+    textBox2.Text = ""
+    textBox2.ClearTextOnFocus = false
+    textBox2.TextXAlignment = Enum.TextXAlignment.Left
+    textBox2.ZIndex = 51
+    Listener(textBox2, 10)
+    local Element99 = Instance.new("UIPadding", textBox2)
+    Element99.PaddingLeft = UDim.new(0, 14)
+    Element99.PaddingRight = UDim.new(0, 14)
+    return textBox2
+end
+
+local Element100 = func49("Outfit name (max 15)", 56)
+
+Element100:GetPropertyChangedSignal("Text"):Connect(function()
+    if #Element100.Text > 15 then
+        Element100.Text = string.sub(Element100.Text, 1, 15)
+    end
+end)
+
+local Element101 = func49("BH-AE-xxxxxxxxxxxxxxxx", 96)
+Element101.Font = Enum.Font.Code
+Element101.TextSize = 12
+local Element102 = Instance.new("TextButton", frame16)
+Element102.Size = UDim2.new(1,-160, 0, 38)
+Element102.Position = UDim2.new(0, 20, 1,-46)
+Element102.BackgroundColor3 = Container.Neon3
+Element102.BackgroundTransparency = 0.15
+Element102.BorderSizePixel = 0
+Element102.Text = "PUBLISH"
+Element102.TextColor3 = Color3.fromRGB(255, 255, 255)
+Element102.Font = Enum.Font.GothamBlack
+Element102.TextSize = 14
+Element102.AutoButtonColor = false
+Element102.ZIndex = 51
+Listener(Element102, 12)
+func10(Element102, Container.Neon, Container.Neon2, 90)
+func12(Element102)
+local Element103 = Instance.new("TextButton", frame16)
+Element103.Size = UDim2.new(0, 110, 0, 38)
+Element103.Position = UDim2.new(1,-130, 1,-46)
+Element103.BackgroundColor3 = Container.Card
+Element103.BackgroundTransparency = 0.3
+Element103.BorderSizePixel = 0
+Element103.Text = "CANCEL"
+Element103.TextColor3 = Container.Text
+Element103.Font = Enum.Font.GothamBold
+Element103.TextSize = 12
+Element103.AutoButtonColor = false
+Element103.ZIndex = 51
+Listener(Element103, 12)
+func12(Element103)
+
+local function func50()
+    local Element104 = func46()
+    local Element105 = math.max(0, 10 -Element104)
+    Element97.Text = Element104 .. "/10 today"
+
+    if Element105 == 0 then
+        Element97.TextColor3 = Container.Danger
+    elseif Element105 <= 3 then
+        Element97.TextColor3 = Container.Warning
+    else
+        Element97.TextColor3 = Container.Success
+    end
+end
+
+local function Label6()
+    Element100.Text = ""
+    Element101.Text = ""
+    frame16.Size = UDim2.new(0, 0, 0, 0)
+    frame16.Visible = true
+    TweenService:Create(frame16, tweenInfo, {Size = UDim2.new(0, 380, 0, 200)}):Play()
+    task.spawn(func50)
+end
+
+local function func52()
+    local Tween6 = TweenService:Create(frame16, Element34, {Size = UDim2.new(0, 0, 0, 0)})
+    Tween6:Play()
+    Tween6.Completed:Wait()
+    frame16.Visible = false
+end
+
+Element103.MouseButton1Click:Connect(func52)
+Element9.MouseButton1Click:Connect(Label6)
+
+Element102.MouseButton1Click:Connect(function()
+    local Label7 = Element100.Text:gsub("^%s+", ""):gsub("%s+$", "")
+    local Label8 = Element101.Text:gsub("^%s+", ""):gsub("%s+$", "")
+
+    if #Label7 < 2 then
+        ShowNotification("PLEASE ENTER A NAME", Container.Danger)
+        return
+    end
+
+    if not Label8:match("^BH%-AE%-") then
+        ShowNotification("PLEASE PUT LEGIT CODE", Container.Danger)
+        return
+    end
+
+    local Offset4 = func46()
+
+    if Offset4 >= 10 then
+        ShowNotification("DAILY LIMIT REACHED (10/day)", Container.Danger)
+        return
+    end
+
+    Element102.Text = "UPLOADING..."
+
+    task.spawn(function()
+        if func27("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/avatarcodes.json", {
+        Name = Label7,
+        Element29 = Label8,
+        uploaderId = LocalPlayer.UserId,
+        uploaderName = LocalPlayer.Name,
+        uploaderDisplay = LocalPlayer.DisplayName,
+        timestamp = os.time(),
+        }) then
+            func47()
+            func50()
+            ShowNotification("UPLOAD SUCCESS! (" .. Offset4 + 1 .. "/10 today)", Container.Success)
+            func52()
+            task.wait(0.3)
+            Chunk.codesLastFetch = 0
+            renderCodes(All, true)
+        else
+            ShowNotification("UPLOAD FAILED", Container.Danger)
+        end
+        Element102.Text = "PUBLISH"
+    end)
+end)
+
+local function func53()
+    for Instance8, Instance9 in ipairs(scrollingFrame:GetChildren()) do
+        if not Instance9:IsA("UIListLayout") and not Instance9:IsA("UIPadding") then
+            Instance9:Destroy()
+        end
+    end
+end
+
+local function func54(Request44)
+    for Offset6, Offset7 in ipairs({Offset, Element7, Element8}) do
+        if Offset7 == Request44 then
+            Offset7:SetAttribute("Active", true)
+            Offset7.BackgroundTransparency = 0.05
+            local Accent = Offset7:FindFirstChild("Accent")
+
+            if Accent then
+                Accent.Size = UDim2.new(0, 3, 0, 26)
+            end
+        else
+            Offset7:SetAttribute("Active", false)
+            Offset7.BackgroundTransparency = 0.35
+            local Accent2 = Offset7:FindFirstChild("Accent")
+
+            if Accent2 then
+                Accent2.Size = UDim2.new(0, 3, 0, 18)
+            end
+        end
+    end
+end
+
+local function func55(Request45)
+    local Element106 = Request45.__views or 0
+    local Element107 = Request45.timestamp and os.date("%b %d", Request45.timestamp)
+    return "by " .. (Request45.uploaderDisplay or Request45.uploaderName or "Unknown") .. "  •  " .. func13(Element106) .. "  •  " .. (Element107 or "Unknown")
+end
+
+local function func56(Request46, layoutOrder)
+    local Frame17 = Instance.new("Frame")
+    Frame17.Name = "Code_" .. tostring(Request46.Element30)
+    Frame17.Size = UDim2.new(1,-6, 0, 60)
+    Frame17.BackgroundColor3 = Container.Card
+    Frame17.BackgroundTransparency = 0.35
+    Frame17.BorderSizePixel = 0
+    Frame17.LayoutOrder = layoutOrder
+    Frame17.ZIndex = 8
+    Listener(Frame17, 10)
+    local textButton4 = Instance.new("TextButton", Frame17)
+    textButton4.Size = UDim2.new(1,-80, 0, 28)
+    textButton4.Position = UDim2.new(0, 0, 0, 6)
+    textButton4.BackgroundTransparency = 1
+    textButton4.Text = Request46.__trending and " 🔥  " .. (Request46.Name or "Untitled") or "  " .. (Request46.Name or "Untitled")
+    textButton4.TextColor3 = Container.Text
+    textButton4.Font = Enum.Font.GothamBold
+    textButton4.TextSize = 13
+    textButton4.TextXAlignment = Enum.TextXAlignment.Left
+    textButton4.ZIndex = 9
+    local textLabel5 = Instance.new("TextLabel", Frame17)
+    textLabel5.Size = UDim2.new(1,-12, 0, 20)
+    textLabel5.Position = UDim2.new(0, 8, 1,-24)
+    textLabel5.BackgroundTransparency = 1
+    textLabel5.Text = func55(Request46)
+    textLabel5.TextColor3 = Container.TextDim
+    textLabel5.Font = Enum.Font.GothamMedium
+    textLabel5.TextSize = 10
+    textLabel5.TextXAlignment = Enum.TextXAlignment.Left
+    textLabel5.ZIndex = 9
+
+    textButton4.MouseButton1Click:Connect(function()
+        Element29 = Request46.Element29
+        Element30 = Request46.Element30
+        Element31 = Request46
+
+        for Instance10, Instance11 in ipairs(scrollingFrame:GetChildren()) do
+            if Instance11:IsA("Frame") then
+                TweenService:Create(Instance11, TweenInfo.new(0.15), {BackgroundColor3 = Container.Card})
+                    :Play()
+            end
+        end
+
+        TweenService:Create(Frame17, TweenInfo.new(0.15), {BackgroundColor3 = Container.CardHover})
+            :Play()
+
+        task.spawn(function()
+            Request46.__views = func48(Request46.Element30)
+
+            if textLabel5 and textLabel5.Parent then
+                textLabel5.Text = func55(Request46)
+            end
+
+            if Element30 == Request46.Element30 then
+                func19(Request46)
+            end
+        end)
+    end)
+
+    Frame17.MouseEnter:Connect(function()
+        func11(Frame17, 0.15, {BackgroundTransparency = 0.15})
+    end)
+
+    Frame17.MouseLeave:Connect(function()
+        local Element108 = Element30 == Request46.Element30
+        func11(Frame17, 0.15, {
+        BackgroundTransparency = Element108 and 0.15 or 0.35,
+        BackgroundColor3 = Element108 and Container.CardHover or Container.Card,
+        })
+    end)
+
+    local Element109 = Instance.new("TextButton", Frame17)
+    Element109.Size = UDim2.new(0, 22, 0, 22)
+    Element109.Position = UDim2.new(1,-74, 0, 7)
+    Element109.BackgroundTransparency = 1
+    Element109.Text = "📋"
+    Element109.TextColor3 = Container.Neon
+    Element109.Font = Enum.Font.GothamBold
+    Element109.TextSize = 14
+    Element109.ZIndex = 9
+
+    Element109.MouseButton1Click:Connect(function()
+        pcall(function()
+            setclipboard(Request46.Element29 or "")
+        end)
+        ShowNotification("CODE COPIED!", Container.Success)
+    end)
+
+    local Element110 = Instance.new("TextButton", Frame17)
+    Element110.Size = UDim2.new(0, 24, 0, 24)
+    Element110.Position = UDim2.new(1,-50, 0, 6)
+    Element110.BackgroundTransparency = 1
+    Element110.Text = Element32[Request46.Element30] and "★" "☆"
+    Element110.TextColor3 = Container.Warning
+    Element110.Font = Enum.Font.GothamBold
+    Element110.TextSize = 18
+    Element110.ZIndex = 9
+
+    Element110.MouseButton1Click:Connect(function()
+        if Element32[Request46.Element30] then
+            func29("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/savedcodes.json" .. "/" .. LocalPlayer.UserId .. "/" .. Request46.Element30 .. ".json")
+            Element32[Request46.Element30] = nil
+            Chunk.saved[Request46.Element30] = nil
+            Element110.Text = "☆"
+            ShowNotification("REMOVED FROM SAVED", Container.Warning)
+        else
+            func28(
+            "https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/savedcodes.json" .. "/" .. LocalPlayer.UserId .. "/" .. Request46.Element30 .. ".json",
+            true
+            )
+
+            Element32[Request46.Element30] = true
+            Chunk.saved[Request46.Element30] = true
+            Element110.Text = "★"
+            ShowNotification("SAVED!", Container.Warning)
+        end
+    end)
+
+    if Request46.uploaderId == LocalPlayer.UserId then
+        local Element111 = Instance.new("TextButton", Frame17)
+        Element111.Size = UDim2.new(0, 24, 0, 24)
+        Element111.Position = UDim2.new(1,-26, 0, 6)
+        Element111.BackgroundTransparency = 1
+        Element111.Text = "X"
+        Element111.TextColor3 = Container.Danger
+        Element111.Font = Enum.Font.GothamBold
+        Element111.TextSize = 14
+        Element111.ZIndex = 9
+
+        Element111.MouseButton1Click:Connect(function()
+            local Tween7 = TweenService:Create(
+            Frame17,
+            TweenInfo.new(0.22, Enum.EasingStyle.Back, Enum.EasingDirection.In),
+            {Size = UDim2.new(0, 0, 0, 0)}
+            )
+
+            Tween7:Play()
+            Tween7.Completed:Wait()
+            func29(("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/avatarcodes.json")
+                :gsub("%.json", "/" .. Request46.Element30 .. ".json"))
+            Frame17:Destroy()
+            Chunk.codesLastFetch = 0
+            ShowNotification("CODE DELETED", Container.Danger)
+        end)
+    end
+
+    Frame17.Size = UDim2.new(0, 0, 0, 0)
+
+    TweenService:Create(
+    Frame17,
+    TweenInfo.new(0.28, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+    {Size = UDim2.new(1,-6, 0, 60)}
+    ):Play()
+end
+
+function renderCodes(Request47, Request48)
+    All = Request47 or "All"
+    func53()
+    Element32 = fetchSaved(Request48)
+    Element29 = nil
+    Element30 = nil
+    Element31 = nil
+    func18()
+
+    if Request47 == "All"
+    func54(Offset)
+elseif Request47 == "Saved"
+    func54(Element7)
+elseif Request47 == "MyCodes"
+    func54(Element8)
+end
+
+local Element112 = fetchCodes(Request48)
+local Element113 = fetchAllViews(Request48)
+
+for Offset8, Offset9 in ipairs(Element112) do
+    Offset9.__views = Element113[Offset9.Element30] or Chunk.views[Offset9.Element30] or 0
+end
+
+table.sort(Element112, function(Request49, Request50)
+    if (Request49.__views or 0) ~= (Request50.__views or 0) then
+        return (Request49.__views or 0) > (Request50.__views or 0)
+    end
+    return (Request49.timestamp or 0) > (Request50.timestamp or 0)
+end)
+
+local Element114 = 0
+
+for Offset10, Offset11 in ipairs(Element112) do
+    if Element114 < 3 and (Offset11.__views or 0) > 0 then
+        Offset11.__trending = true
+        Element114 = Element114 + 1
+    end
+end
+
+local Label9 = textBox2.Text:lower()
+local Element115 = 0
+
+for Offset12, Offset13 in ipairs(Element112) do
+    local Offset14 = true
+
+    if Request47 == "MyCodes" and Offset13.uploaderId ~= LocalPlayer.UserId then
+        Offset14 = false
+    end
+
+    if Request47 == "Saved" and not Element32[Offset13.Element30] then
+        Offset14 = false
+    end
+
+    if #Label9 > 0 and Label9 ~= "search here"
+    if not (Offset13.Name or ""):lower():find(Label9, 1, true) then
+        Offset14 = false
+    end
+end
+
+if Offset14 then
+    Element115 = Element115 + 1
+    func56(Offset13, Element115)
+end
+
+end
+
+if Element115 == 0 then
+    local textLabel6 = Instance.new("TextLabel", scrollingFrame)
+    textLabel6.Size = UDim2.new(1,-6, 0, 60)
+    textLabel6.BackgroundTransparency = 1
+    textLabel6.Text = "No codes yet.\nUpload one to start\nABE BHAI KOI CODE DAALDOO"
+    textLabel6.TextColor3 = Container.TextDim
+    textLabel6.Font = Enum.Font.GothamBold
+    textLabel6.TextSize = 12
+    textLabel6.TextWrapped = true
+    textLabel6.LayoutOrder = 1
+    textLabel6.ZIndex = 8
+end
+
+end
+
+Offset.MouseButton1Click:Connect(function()
+    renderCodes("All")
+end)
+
+Element7.MouseButton1Click:Connect(function()
+    renderCodes("Saved")
+end)
+
+Element8.MouseButton1Click:Connect(function()
+    renderCodes("MyCodes")
+end)
+
+Element111.MouseButton1Click:Connect(function()
+    Chunk.codesLastFetch = 0
+    Chunk.savedLastFetch = 0
+    Chunk.outfitViewsLastFetch = 0
+    renderCodes(All, true)
+    ShowNotification("REFRESHED", Container.Neon)
+end)
+
+Element13.MouseButton1Click:Connect(function()
+    Chunk.codesLastFetch = 0
+    Chunk.savedLastFetch = 0
+    Chunk.outfitViewsLastFetch = 0
+    renderCodes(All, true)
+    ShowNotification("REFRESHED", Container.Neon)
+end)
+
+textBox2:GetPropertyChangedSignal("Text"):Connect(function()
+    task.delay(0.3, function()
+        if Element27 then
+            renderCodes(All)
+        end
+    end)
+end)
+
+Element25.MouseButton1Click:Connect(function()
+    if not Element29 then
+        ShowNotification("SELECT A CODE FIRST", Container.Warning)
+        return
+    end
+
+    if not Element113 then
+        ShowNotification("NOT IN A SUPPORTED GAME", Container.Danger)
+        return
+    end
+
+    ShowNotification("APPLYING…", Container.Neon)
+
+    task.spawn(function()
+        if Executor(Element29) then
+            ShowNotification("FIT APPLIED!", Container.Success)
+        end
+    end)
+end)
+
+local Element116 = {}
+local Name2
+local DisplayName
+local UserId
+local frame17 = Instance.new("Frame", ScreenGui)
+frame17.Size = UDim2.new(1, 0, 1, 0)
+frame17.BackgroundColor3 = Color3.new(0, 0, 0)
+frame17.BackgroundTransparency = 0.55
+frame17.BorderSizePixel = 0
+frame17.Visible = false
+frame17.ZIndex = 200
+local Frame18 = Instance.new("Frame")
+Frame18.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame18.Position = UDim2.new(0.5, 0, 0.5, 0)
+Frame18.Size = UDim2.new(0, 400, 0, 320)
+Frame18.BackgroundColor3 = Container.BaseBg
+Frame18.BackgroundTransparency = 0.5
+Frame18.BorderSizePixel = 0
+Frame18.ZIndex = 201
+Listener(Frame18, 16)
+Resolver(Frame18, Container.Neon, 1.3, 0.4)
+func10(Frame18, Color3.fromRGB(255, 255, 255), Color3.fromRGB(235, 248, 255), 45)
+local Element117 = Instance.new("TextButton", Frame18)
+Element117.Size = UDim2.new(0, 26, 0, 26)
+Element117.Position = UDim2.new(1,-34, 0, 8)
+Element117.BackgroundTransparency = 1
+Element117.BorderSizePixel = 0
+Element117.Text = "X"
+Element117.TextColor3 = Container.Danger
+Element117.Font = Enum.Font.LuckiestGuy
+Element117.TextSize = 16
+Element117.AutoButtonColor = false
+Element117.ZIndex = 203
+local Element118 = Instance.new("TextLabel", Frame18)
+Element118.Size = UDim2.new(1,-32, 0, 14)
+Element118.Position = UDim2.new(0, 16, 0, 14)
+Element118.BackgroundTransparency = 1
+Element118.Text = "1.  SELECT A FRIEND"
+Element118.TextColor3 = Container.Neon
+Element118.Font = Enum.Font.LuckiestGuy
+Element118.TextSize = 12
+Element118.TextXAlignment = Enum.TextXAlignment.Left
+Element118.ZIndex = 202
+local Frame19 = Instance.new("Frame")
+Frame19.Size = UDim2.new(1,-32, 0, 108)
+Frame19.Position = UDim2.new(0, 16, 0, 32)
+Frame19.BackgroundColor3 = Container.Panel
+Frame19.BackgroundTransparency = 0.55
+Frame19.BorderSizePixel = 0
+Frame19.ClipsDescendants = true
+Frame19.ZIndex = 202
+Listener(Frame19, 12)
+local Element119 = Instance.new("ScrollingFrame", Frame19)
+Element119.Size = UDim2.new(1, 0, 1, 0)
+Element119.BackgroundTransparency = 1
+Element119.BorderSizePixel = 0
+Element119.ClipsDescendants = true
+Element119.ScrollBarThickness = 3
+Element119.ScrollBarImageColor3 = Container.Neon
+Element119.CanvasSize = UDim2.new(0, 0, 0, 0)
+Element119.AutomaticCanvasSize = Enum.AutomaticSize.Y
+Element119.ZIndex = 203
+local Element120 = Instance.new("UIListLayout", Element119)
+Element120.SortOrder = Enum.SortOrder.LayoutOrder
+Element120.Padding = UDim.new(0, 4)
+local Element121 = Instance.new("UIPadding", Element119)
+Element121.PaddingTop = UDim.new(0, 6)
+Element121.PaddingLeft = UDim.new(0, 6)
+Element121.PaddingRight = UDim.new(0, 10)
+Element121.PaddingBottom = UDim.new(0, 6)
+local Element122 = Instance.new("TextLabel", Frame18)
+Element122.Size = UDim2.new(1,-32, 0, 14)
+Element122.Position = UDim2.new(0, 16, 0, 148)
+Element122.BackgroundTransparency = 1
+Element122.Text = "2.  PASTE OUTFIT CODE"
+Element122.TextColor3 = Container.Neon
+Element122.Font = Enum.Font.LuckiestGuy
+Element122.TextSize = 12
+Element122.TextXAlignment = Enum.TextXAlignment.Left
+Element122.ZIndex = 202
+local Element123 = Instance.new("TextBox", Frame18)
+Element123.Size = UDim2.new(1,-32, 0, 34)
+Element123.Position = UDim2.new(0, 16, 0, 166)
+Element123.BackgroundColor3 = Container.Card
+Element123.BackgroundTransparency = 0.35
+Element123.BorderSizePixel = 0
+Element123.PlaceholderText = "BH-AE-xxxxxxxxxxxxxxxx"
+Element123.PlaceholderColor3 = Container.TextDim
+Element123.TextColor3 = Container.Text
+Element123.Font = Enum.Font.Code
+Element123.TextSize = 12
+Element123.Text = ""
+Element123.ClearTextOnFocus = false
+Element123.TextXAlignment = Enum.TextXAlignment.Left
+Element123.ZIndex = 202
+Listener(Element123, 10)
+local Element124 = Instance.new("UIPadding", Element123)
+Element124.PaddingLeft = UDim.new(0, 12)
+Element124.PaddingRight = UDim.new(0, 12)
+local Element125 = Instance.new("TextLabel", Frame18)
+Element125.Size = UDim2.new(1,-32, 0, 14)
+Element125.Position = UDim2.new(0, 16, 0, 206)
+Element125.BackgroundTransparency = 1
+Element125.Text = "3.  NAME (OPTIONAL)"
+Element125.TextColor3 = Container.Neon
+Element125.Font = Enum.Font.LuckiestGuy
+Element125.TextSize = 12
+Element125.TextXAlignment = Enum.TextXAlignment.Left
+Element125.ZIndex = 202
+local Element126 = Instance.new("TextBox", Frame18)
+Element126.Size = UDim2.new(1,-32, 0, 34)
+Element126.Position = UDim2.new(0, 16, 0, 224)
+Element126.BackgroundColor3 = Container.Card
+Element126.BackgroundTransparency = 0.35
+Element126.BorderSizePixel = 0
+Element126.PlaceholderText = "e.g CUD NAAM DALNA TO DAALL WARA MT DAAL"
+Element126.PlaceholderColor3 = Container.TextDim
+Element126.TextColor3 = Container.Text
+Element126.Font = Enum.Font.GothamMedium
+Element126.TextSize = 12
+Element126.Text = ""
+Element126.ClearTextOnFocus = false
+Element126.TextXAlignment = Enum.TextXAlignment.Left
+Element126.ZIndex = 202
+Listener(Element126, 10)
+local Element127 = Instance.new("UIPadding", Element126)
+Element127.PaddingLeft = UDim.new(0, 12)
+Element127.PaddingRight = UDim.new(0, 12)
+local Element128 = Instance.new("TextButton", Frame18)
+Element128.Size = UDim2.new(0, 250, 0, 40)
+Element128.Position = UDim2.new(0, 16, 1,-52)
+Element128.BackgroundColor3 = Container.Neon
+Element128.BorderSizePixel = 0
+Element128.Text = "SEND OUTFIT"
+Element128.TextColor3 = Color3.fromRGB(255, 255, 255)
+Element128.Font = Enum.Font.LuckiestGuy
+Element128.TextSize = 15
+Element128.AutoButtonColor = false
+Element128.ZIndex = 202
+Listener(Element128, 12)
+func10(Element128, Container.Neon, Container.Neon2, 90)
+
+Element128.MouseEnter:Connect(function()
+    TweenService:Create(Element128, TweenInfo.new(0.15), {BackgroundColor3 = Container.Neon2})
+        :Play()
+end)
+
+Element128.MouseLeave:Connect(function()
+    TweenService:Create(Element128, TweenInfo.new(0.15), {BackgroundColor3 = Container.Neon}):Play()
+end)
+
+local Element129 = Instance.new("TextButton", Frame18)
+Element129.Size = UDim2.new(0, 110, 0, 40)
+Element129.Position = UDim2.new(1,-126, 1,-52)
+Element129.BackgroundColor3 = Container.Card
+Element129.BackgroundTransparency = 0.25
+Element129.BorderSizePixel = 0
+Element129.Text = "CANCEL"
+Element129.TextColor3 = Container.Text
+Element129.Font = Enum.Font.LuckiestGuy
+Element129.TextSize = 14
+Element129.AutoButtonColor = false
+Element129.ZIndex = 202
+Listener(Element129, 12)
+
+Element129.MouseEnter:Connect(function()
+    TweenService:Create(Element129, TweenInfo.new(0.15), {BackgroundTransparency = 0.1}):Play()
+end)
+
+Element129.MouseLeave:Connect(function()
+    TweenService:Create(Element129, TweenInfo.new(0.15), {BackgroundTransparency = 0.25}):Play()
+end)
+
+local function func57()
+    local Element130 = 0
+
+    for Instance12, Instance13 in ipairs(Element119:GetChildren()) do
+        if not Instance13:IsA("UIListLayout") and not Instance13:IsA("UIPadding") then
+            Instance13:Destroy()
+        end
+    end
+
+    for Offset15, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            Element130 = Element130 + 1
+            local textButton5 = Instance.new("TextButton", Element119)
+            textButton5.Size = UDim2.new(1,-6, 0, 44)
+            textButton5.BackgroundColor3 = Container.Card
+            textButton5.BackgroundTransparency = 0.35
+            textButton5.BorderSizePixel = 0
+            textButton5.LayoutOrder = Element130
+            textButton5.Text = ""
+            textButton5.AutoButtonColor = false
+            textButton5.ZIndex = 204
+            Listener(textButton5, 10)
+            local imageLabel2 = Instance.new("ImageLabel", textButton5)
+            imageLabel2.Size = UDim2.new(0, 34, 0, 34)
+            imageLabel2.Position = UDim2.new(0, 6, 0.5,-17)
+            imageLabel2.BackgroundColor3 = Container.Card
+            imageLabel2.BorderSizePixel = 0
+            imageLabel2.Image = ""
+            imageLabel2.ZIndex = 205
+            Listener(imageLabel2, 17)
+
+            task.spawn(function()
+                pcall(function()
+                    local Player6 = Players:GetUserThumbnailAsync(player.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size48x48)
+                    if imageLabel2.Parent then
+                        imageLabel2.Image = Player6
+                    end
+                end)
+            end)
+
+            local textLabel7 = Instance.new("TextLabel", textButton5)
+            textLabel7.Size = UDim2.new(1,-50, 0, 18)
+            textLabel7.Position = UDim2.new(0, 48, 0, 5)
+            textLabel7.BackgroundTransparency = 1
+            textLabel7.Text = player.DisplayName
+            textLabel7.TextColor3 = Container.Text
+            textLabel7.Font = Enum.Font.GothamBold
+            textLabel7.TextSize = 12
+            textLabel7.TextXAlignment = Enum.TextXAlignment.Left
+            textLabel7.ZIndex = 205
+            local Offset16 = Instance.new("TextLabel", textButton5)
+            Offset16.Size = UDim2.new(1,-50, 0, 14)
+            Offset16.Position = UDim2.new(0, 48, 0, 22)
+            Offset16.BackgroundTransparency = 1
+            Offset16.Text = "@" .. player.Name2
+            Offset16.TextColor3 = Container.TextDim
+            Offset16.Font = Enum.Font.GothamMedium
+            Offset16.TextSize = 10
+            Offset16.TextXAlignment = Enum.TextXAlignment.Left
+            Offset16.ZIndex = 205
+            local Offset17 = Instance.new("TextLabel", textButton5)
+            Offset17.Size = UDim2.new(0, 22, 0, 22)
+            Offset17.Position = UDim2.new(1,-28, 0.5,-11)
+            Offset17.BackgroundTransparency = 1
+            Offset17.Text = "✓"
+            Offset17.TextColor3 = Container.Success
+            Offset17.Font = Enum.Font.GothamBold
+            Offset17.TextSize = 16
+            Offset17.Visible = false
+            Offset17.ZIndex = 206
+
+            textButton5.MouseButton1Click:Connect(function()
+                for Instance14, Instance15 in ipairs(Element119:GetChildren()) do
+                    if Instance15:IsA("TextButton") then
+                        Instance15:SetAttribute("Selected", false)
+                        TweenService:Create(Instance15, TweenInfo.new(0.15), {BackgroundColor3 = Container.Card})
+                            :Play()
+
+                        for Instance16, Instance17 in ipairs(Instance15:GetChildren()) do
+                            if Instance17:IsA("TextLabel") and Instance17.Text == "✓"
+                            Instance17.Visible = false
+                        end
+                    end
+                end
+            end
+
+            textButton5:SetAttribute("Selected", true)
+            TweenService:Create(textButton5, TweenInfo.new(0.15), {BackgroundColor3 = Container.CardHover})
+                :Play()
+            Offset17.Visible = true
+            Name2 = player.Name2
+            DisplayName = player.DisplayName
+            UserId = player.UserId
+        end)
+
+        textButton5.MouseEnter:Connect(function()
+            if not textButton5:GetAttribute("Selected") then
+                TweenService:Create(textButton5, TweenInfo.new(0.15), {BackgroundTransparency = 0.15})
+                    :Play()
+            end
+        end)
+
+        textButton5.MouseLeave:Connect(function()
+            if not textButton5:GetAttribute("Selected") then
+                TweenService:Create(textButton5, TweenInfo.new(0.15), {BackgroundTransparency = 0.35})
+                    :Play()
+            end
+        end)
+    end
+end
+
+if Element130 == 0 then
+    local Element131 = Instance.new("TextLabel", Element119)
+    Element131.Size = UDim2.new(1,-6, 0, 44)
+    Element131.BackgroundTransparency = 1
+    Element131.Text = "No other players in this server."
+    Element131.TextColor3 = Container.TextDim
+    Element131.Font = Enum.Font.GothamBold
+    Element131.TextSize = 11
+    Element131.LayoutOrder = 1
+    Element131.ZIndex = 204
+end
+
+end
+
+local function func58()
+    Name2 = nil
+    DisplayName = nil
+    UserId = nil
+    Element123.Text = ""
+    Element126.Text = ""
+    func57()
+    frame17.Visible = true
+    frame17.BackgroundTransparency = 1
+    Frame18.Size = UDim2.new(0, 380, 0, 300)
+    TweenService:Create(frame17, TweenInfo.new(0.25), {BackgroundTransparency = 0.55}):Play()
+    TweenService:Create(Frame18, TweenInfo.new(0.3, Enum.EasingStyle.Back), {Size = UDim2.new(0, 400, 0, 320)})
+        :Play()
+end
+
+local function func59()
+    local Tween8 = TweenService:Create(frame17, TweenInfo.new(0.2), {BackgroundTransparency = 1})
+    TweenService:Create(Frame18, TweenInfo.new(0.2), {Size = UDim2.new(0, 380, 0, 300)}):Play()
+    Tween8:Play()
+    Tween8.Completed:Wait()
+    frame17.Visible = false
+end
+
+Element11.MouseButton1Click:Connect(func58)
+Element117.MouseButton1Click:Connect(func59)
+Element129.MouseButton1Click:Connect(func59)
+
+frame17.InputBegan:Connect(function(Input7)
+    if Input7.UserInputType == Enum.UserInputType.MouseButton1 and Input7.Target == frame17 then
+        func59()
+    end
+end)
+
+Element128.MouseButton1Click:Connect(function()
+    local Element132 = 180 - (os.time() -Element130)
+
+    if Element130 > 0 and Element132 > 0 then
+        ShowNotification("WAIT " .. Element132 .. "s BEFORE NEXT SHARE", Container.Danger)
+        return
+    end
+
+    if not Name2 or not UserId then
+        ShowNotification("SELECT A FRIEND FIRST", Container.Warning)
+        return
+    end
+
+    local Offset9 = Element123.Text:gsub("^%s+", ""):gsub("%s+$", "")
+    local Offset = Element126.Text:gsub("^%s+", ""):gsub("%s+$", "")
+
+    if not Offset9:match("^BH%-AE%-") then
+        ShowNotification("PLEASE PUT LEGIT CODE", Container.Danger)
+        return
+    end
+
+    if Offset == ""
+    Offset = "Shared Outfit"
+end
+
+Element128.Text = "SENDING..."
+Element128.AutoButtonColor = false
+
+task.spawn(function()
+    local Element133 = HttpService:GenerateGUID(false)
+    local Element134 = ("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/outfit_shares.json")
+        :gsub("%.json", "/" .. tostring(UserId) .. "/" .. Element133 .. ".json")
+
+    local Instance18 = {
+    sender = LocalPlayer.Name2,
+    senderDisplay = LocalPlayer.DisplayName,
+    senderId = LocalPlayer.UserId,
+    outfitCode = Offset9,
+    outfitName = Offset,
+    timestamp = os.time(),
+    }
+
+    if pcall(function()
+        Element112({
+        Url = Element134,
+        Method = "PUT",
+        Headers = {["Content-Type"] = "application/json"},
+        Body = HttpService:JSONEncode(Instance18),
+        })
+    end) then
+        Element130 = os.time()
+        ShowNotification("SENT TO " .. DisplayName, Container.Success)
+        func59()
+    else
+        ShowNotification("SEND FAILED — check rules", Container.Danger)
+    end
+
+    Element128.Text = "SEND OUTFIT"
+    Element128.AutoButtonColor = true
+end)
+
+end)
+
+local function func60(Request51, Request52)
+    local frame3 = Instance.new("Frame", ScreenGui)
+    frame3.Size = UDim2.new(1, 0, 1, 0)
+    frame3.BackgroundColor3 = Color3.new(0, 0, 0)
+    frame3.BackgroundTransparency = 0.6
+    frame3.BorderSizePixel = 0
+    frame3.ZIndex = 250
+    local Frame20 = Instance.new("Frame")
+    Frame20.AnchorPoint = Vector2.new(0.5, 0.5)
+    Frame20.Position = UDim2.new(0.5, 0, 0.5, 0)
+    Frame20.Size = UDim2.new(0, 0, 0, 0)
+    Frame20.BackgroundColor3 = Container.BaseBg
+    Frame20.BackgroundTransparency = 0.05
+    Frame20.BorderSizePixel = 0
+    Frame20.ZIndex = 251
+    Listener(Frame20, 16)
+    Resolver(Frame20, Container.Neon, 1.5, 0.3)
+    func10(Frame20, Color3.fromRGB(255, 255, 255), Color3.fromRGB(235, 248, 255), 45)
+    local Frame21 = Instance.new("Frame")
+    Frame21.Size = UDim2.new(1, 0, 0, 48)
+    Frame21.BackgroundColor3 = Container.Neon3
+    Frame21.BorderSizePixel = 0
+    Frame21.ZIndex = 252
+    Listener(Frame21, 16)
+    local Frame22 = Instance.new("Frame")
+    Frame22.Size = UDim2.new(1, 0, 0, 16)
+    Frame22.Position = UDim2.new(0, 0, 1,-16)
+    Frame22.BackgroundColor3 = Container.Neon3
+    Frame22.BorderSizePixel = 0
+    Frame22.ZIndex = 252
+    local textLabel8 = Instance.new("TextLabel", Frame21)
+    textLabel8.Size = UDim2.new(0, 24, 0, 24)
+    textLabel8.Position = UDim2.new(0, 16, 0.5,-12)
+    textLabel8.BackgroundTransparency = 1
+    textLabel8.Text = "🎁"
+    textLabel8.Font = Enum.Font.GothamBold
+    textLabel8.TextSize = 20
+    textLabel8.ZIndex = 253
+    local Element135 = Instance.new("TextLabel", Frame21)
+    Element135.Size = UDim2.new(1,-56, 1, 0)
+    Element135.Position = UDim2.new(0, 46, 0, 0)
+    Element135.BackgroundTransparency = 1
+    Element135.Text = "YOU GOT A NEW GIFT !"
+    Element135.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Element135.Font = Enum.Font.LuckiestGuy
+    Element135.TextSize = 20
+    Element135.TextXAlignment = Enum.TextXAlignment.Left
+    Element135.ZIndex = 253
+    local imageLabel3 = Instance.new("ImageLabel", Frame20)
+    imageLabel3.Size = UDim2.new(0, 64, 0, 64)
+    imageLabel3.Position = UDim2.new(0, 20, 0, 60)
+    imageLabel3.BackgroundColor3 = Container.Card
+    imageLabel3.BorderSizePixel = 0
+    imageLabel3.Image = ""
+    imageLabel3.ZIndex = 253
+    Listener(imageLabel3, 32)
+    Resolver(imageLabel3, Container.Neon, 2, 0.3)
+
+    task.spawn(function()
+        pcall(function()
+            local Element136 = Request52.senderId or Players:GetUserIdFromNameAsync(Request52.sender or "Roblox")
+            local UserThumbnailAsync = Players:GetUserThumbnailAsync(Element136, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size180x180)
+
+            if imageLabel3.Parent then
+                imageLabel3.Image = UserThumbnailAsync
+            end
+        end)
+    end)
+
+    local Element137 = Instance.new("TextLabel", Frame20)
+    Element137.Size = UDim2.new(1,-100, 0, 22)
+    Element137.Position = UDim2.new(0, 96, 0, 62)
+    Element137.BackgroundTransparency = 1
+    Element137.Text = Request52.senderDisplay or Request52.sender or "Unknown"
+    Element137.TextColor3 = Container.Text
+    Element137.Font = Enum.Font.GothamBlack
+    Element137.TextSize = 16
+    Element137.TextXAlignment = Enum.TextXAlignment.Left
+    Element137.ZIndex = 253
+    local Element138 = Instance.new("TextLabel", Frame20)
+    Element138.Size = UDim2.new(1,-100, 0, 14)
+    Element138.Position = UDim2.new(0, 96, 0, 84)
+    Element138.BackgroundTransparency = 1
+    Element138.Text = "@" .. (Request52.sender or "unknown")
+    Element138.TextColor3 = Container.TextDim
+    Element138.Font = Enum.Font.GothamMedium
+    Element138.TextSize = 11
+    Element138.TextXAlignment = Enum.TextXAlignment.Left
+    Element138.ZIndex = 253
+    local Frame23 = Instance.new("Frame")
+    Frame23.Size = UDim2.new(1,-40, 0, 56)
+    Frame23.Position = UDim2.new(0, 20, 0, 136)
+    Frame23.BackgroundColor3 = Container.Card
+    Frame23.BackgroundTransparency = 0.3
+    Frame23.BorderSizePixel = 0
+    Frame23.ZIndex = 253
+    Listener(Frame23, 10)
+    local Element139 = Instance.new("TextLabel", Frame23)
+    Element139.Size = UDim2.new(1,-20, 0, 20)
+    Element139.Position = UDim2.new(0, 10, 0, 7)
+    Element139.BackgroundTransparency = 1
+    Element139.Text = Request52.outfitName or "Outfit"
+    Element139.TextColor3 = Container.Text
+    Element139.Font = Enum.Font.GothamBold
+    Element139.TextSize = 13
+    Element139.TextXAlignment = Enum.TextXAlignment.Left
+    Element139.ZIndex = 254
+    local Element140 = Instance.new("TextLabel", Frame23)
+    Element140.Size = UDim2.new(1,-20, 0, 18)
+    Element140.Position = UDim2.new(0, 10, 0, 30)
+    Element140.BackgroundTransparency = 1
+    Element140.Text = Request52.outfitCode or ""
+    Element140.TextColor3 = Container.Neon
+    Element140.Font = Enum.Font.Code
+    Element140.TextSize = 11
+    Element140.TextXAlignment = Enum.TextXAlignment.Left
+    Element140.ZIndex = 254
+    local textButton6 = Instance.new("TextButton", Frame20)
+    textButton6.Size = UDim2.new(0, 180, 0, 40)
+    textButton6.Position = UDim2.new(0, 20, 1,-54)
+    textButton6.BackgroundColor3 = Container.Success
+    textButton6.BorderSizePixel = 0
+    textButton6.Text = "ACCEPT"
+    textButton6.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textButton6.Font = Enum.Font.LuckiestGuy
+    textButton6.TextSize = 14
+    textButton6.AutoButtonColor = false
+    textButton6.ZIndex = 253
+    Listener(textButton6, 12)
+    local Element141 = Instance.new("TextButton", Frame20)
+    Element141.Size = UDim2.new(0, 180, 0, 40)
+    Element141.Position = UDim2.new(1,-200, 1,-54)
+    Element141.BackgroundColor3 = Container.Danger
+    Element141.BorderSizePixel = 0
+    Element141.Text = "REJECT"
+    Element141.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Element141.Font = Enum.Font.LuckiestGuy
+    Element141.TextSize = 14
+    Element141.AutoButtonColor = false
+    Element141.ZIndex = 253
+    Listener(Element141, 12)
+    TweenService:Create(Frame20, TweenInfo.new(0.4, Enum.EasingStyle.Back), {Size = UDim2.new(0, 420, 0, 270)})
+        :Play()
+    local Element142 = ("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/outfit_shares.json")
+        :gsub("%.json", "/" .. LocalPlayer.UserId .. "/" .. Request51 .. ".json")
+
+    local function Callback()
+        pcall(function()
+            Element136({Url = Element142, Method = "DELETE"})
+        end)
+    end
+
+    local function Handler()
+        local Tween9 = TweenService:Create(Frame20, TweenInfo.new(0.2), {Size = UDim2.new(0, 0, 0, 0)})
+        TweenService:Create(frame3, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
+        Tween9:Play()
+        Tween9.Completed:Wait()
+        frame3:Destroy()
+    end
+
+    textButton6.MouseButton1Click:Connect(function()
+        if Element133 and Request52.outfitCode then
+            pcall(function()
+                Element133:InvokeServer("Load", Request52.outfitCode)
+            end)
+        end
+
+        pcall(function()
+            setclipboard(Request52.outfitCode or "")
+        end)
+
+        ShowNotification("ACCEPTED — code copied", Container.Success)
+        Callback()
+        Handler()
+    end)
+
+    Element141.MouseButton1Click:Connect(function()
+        ShowNotification("REJECTED", Container.Warning)
+        Callback()
+        Handler()
+    end)
+end
+
+local function func61()
+    if not Offset14 then
+        return
+    end
+    pcall(function()
+        local Element143 = ("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/outfit_shares.json")
+            :gsub("%.json", "/" .. tostring(LocalPlayer.UserId) .. ".json")
+        local Element144 = Element136({Url = Element143, Method = "GET"})
+
+        if not Element144 or not Element144.Body or Element144.Body == "null"
+        return
+    end
+
+    local Offset = HttpService:JSONDecode(Element144.Body)
+
+    if type(Offset) ~= "table"
+    return
+end
+
+local Element134 = os.time()
+
+for k, Element8 in pairs(Offset) do
+    if type(Element8) == "table" and not Element116[k] then
+        Element116[k] = true
+        if Element134 - (Element8.timestamp or 0) <= 1800 then
+            task.spawn(function()
+                func60(k, Element8)
+            end)
+        else
+            pcall(function()
+                Element136({
+                Url = ("https://archonland-f1b03-default-rtdb.asia-southeast1.firebasedatabase.app/outfit_shares.json")
+                    :gsub("%.json", "/" .. LocalPlayer.UserId .. "/" .. k .. ".json"),
+                Method = "DELETE",
+                })
+            end)
+        end
+    end
+end
+
+end)
+
+end
+
+task.spawn(function()
+    while Offset14 and ScreenGui.Parent do
+        func61()
+        task.wait(4)
+    end
+end)
+
+task.wait(0.5)
+func21()
+task.wait(0.2)
+func18()
+renderCodes("All")
+ShowNotification("VÆLOR CATALOG HAI, CUD RANDIKY", Container.Neon)
